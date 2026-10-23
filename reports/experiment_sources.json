@@ -1,0 +1,11 @@
+{
+  "schemaVersion":1,
+  "items":[{
+    "id":"randomized-experiment-module",
+    "title":"已接入随机实验评估及验证边界",
+    "queries":[
+      {"id":"dataset-design","source":{"label":"Hillstrom / MineThatData 2008","links":[{"label":"发布者实验说明","url":"https://blog.minethatdata.com/2008/03/minethatdata-e-mail-analytics-and-data.html"}],"caveats":["原始文件没有客户ID或分配日志，随机化及每人一行依赖发布者说明；HTTP下载未获传输认证，文件哈希只固定下载版本。","6,562条完全相同的额外记录全部保留，未因相同字段自动删除客户。结果仅适用于所述实验，不能外推为人力政策效果。"]},"summary":"发布者说明64,000名近期购买客户随机分配到两种邮件内容组及不发邮件对照组，随后观察两周。当前模块登记购买率和访问率，计算风险差及四项比较统一校正的区间。","rows":[{"arm":"男装主题邮件","n":21307},{"arm":"女装主题邮件","n":21387},{"arm":"不发邮件","n":21306}],"columns":[{"field":"arm","label":"邮件分配组（不是客户性别）"},{"field":"n","label":"样本行数"}]},
+      {"id":"implementation-checks","source":{"label":"pytest.txt / experiment_live_20260929_034155.json","caveats":["249项软件回归和4项数值核对不代表已知真实因果效应准确率；实际数据的个体反事实不可观测。","实际HTTP接口和浏览器结果卡片已验证；JSON下载事件尚未独立确认。"]},"rows":[{"check":"软件回归","passed":249,"total":249},{"check":"独立SQL与statsmodels效应/区间核对","passed":4,"total":4}],"columns":[{"field":"check","label":"检查"},{"field":"passed","label":"通过"},{"field":"total","label":"总数"}],"methods":[{"language":"calculation","code":"风险差 = 处理组事件人数 / 处理组全部人数 − 对照组事件人数 / 对照组全部人数。\n2个处理组 × 2个结果 = 4项比较；每项alpha=0.05/4=0.0125，Wilson/Newcombe区间名义覆盖98.75%，Bonferroni整体名义覆盖目标95%。"}]}
+    ]
+  }]
+}

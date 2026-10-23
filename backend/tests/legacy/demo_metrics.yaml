@@ -1,0 +1,30 @@
+version: synthetic_hr_v1
+status: 示例口径，非用友生产口径
+owner: demo-only
+population: 仅正式员工，实习生不纳入；部门归属使用该月快照，无跨部门调动
+grain: 每名员工每月一条记录
+metrics:
+  headcount:
+    name: 月末在职人数
+    aliases: [月末在职人数, 期末在职人数]
+    expression: SUM(m.end_active)
+    definition: 月末在职正式员工数量；月末离职人员不计入
+    unit: 人
+  hires:
+    name: 入职人数
+    aliases: [入职人数, 新入职人数]
+    expression: SUM(m.hires)
+    definition: 当月入职正式员工数量；本例每人每月最多一次入职
+    unit: 人
+  exits:
+    name: 离职人数
+    aliases: [离职人数, 离职员工数]
+    expression: SUM(m.exits)
+    definition: 当月离职正式员工数量；本例每人每月最多一次离职
+    unit: 人
+  turnover:
+    name: 离职率
+    aliases: [离职率]
+    expression: ROUND(100.0 * SUM(m.exits) / NULLIF((SUM(m.start_active) + SUM(m.end_active)) / 2.0, 0), 2)
+    definition: 当月离职人数 / ((月初在职人数 + 月末在职人数) / 2) × 100%；分母为零返回空值
+    unit: "%"

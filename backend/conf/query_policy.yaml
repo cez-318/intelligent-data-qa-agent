@@ -1,0 +1,9 @@
+# Trusted server-side allowlist for the original e-commerce sample, NOT HR production permissions.
+max_rows: 200
+timeout_ms: 3000
+tables:
+  dim_region: [region_id, province, region_name, country]
+  dim_customer: [customer_id, member_level]
+  dim_product: [product_id, product_name, category, brand]
+  dim_date: [date_id, year, quarter, month, day]
+  fact_order: [order_id, customer_id, product_id, date_id, region_id, order_quantity, order_amount]

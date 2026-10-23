@@ -1,0 +1,200 @@
+{
+  "raw_rows": 1067371,
+  "invoices": 53628,
+  "stock_codes": 5304,
+  "countries": 43,
+  "missing_customers": 243007,
+  "missing_descriptions": 4382,
+  "missing_dates": 0,
+  "cancellation_rows": 19494,
+  "negative_quantity_rows": 22950,
+  "nonpositive_price_rows": 6207,
+  "min_date": "2009-12-01 07:45:00",
+  "max_date": "2011-12-09 12:50:00",
+  "duplicate_extra_rows": 34335,
+  "curated_rows": 1067371,
+  "join_row_count": 1067371,
+  "duplicate_policy": "Preserve all source rows; flag identical rows, do not silently deduplicate.",
+  "currency": "GBP",
+  "timezone": "Source does not specify timezone; preserve source wall-clock time without conversion.",
+  "monthly": [
+    {
+      "month": "2009-12",
+      "rows": 45228,
+      "missing_customers": 13468
+    },
+    {
+      "month": "2010-01",
+      "rows": 31555,
+      "missing_customers": 9116
+    },
+    {
+      "month": "2010-02",
+      "rows": 29388,
+      "missing_customers": 5482
+    },
+    {
+      "month": "2010-03",
+      "rows": 41511,
+      "missing_customers": 8397
+    },
+    {
+      "month": "2010-04",
+      "rows": 34057,
+      "missing_customers": 6224
+    },
+    {
+      "month": "2010-05",
+      "rows": 35323,
+      "missing_customers": 5719
+    },
+    {
+      "month": "2010-06",
+      "rows": 39983,
+      "missing_customers": 8033
+    },
+    {
+      "month": "2010-07",
+      "rows": 33383,
+      "missing_customers": 5637
+    },
+    {
+      "month": "2010-08",
+      "rows": 33306,
+      "missing_customers": 6364
+    },
+    {
+      "month": "2010-09",
+      "rows": 42091,
+      "missing_customers": 6705
+    },
+    {
+      "month": "2010-10",
+      "rows": 59098,
+      "missing_customers": 8537
+    },
+    {
+      "month": "2010-11",
+      "rows": 78015,
+      "missing_customers": 16525
+    },
+    {
+      "month": "2010-12",
+      "rows": 65004,
+      "missing_customers": 23351
+    },
+    {
+      "month": "2011-01",
+      "rows": 35147,
+      "missing_customers": 13235
+    },
+    {
+      "month": "2011-02",
+      "rows": 27707,
+      "missing_customers": 7344
+    },
+    {
+      "month": "2011-03",
+      "rows": 36748,
+      "missing_customers": 8926
+    },
+    {
+      "month": "2011-04",
+      "rows": 29916,
+      "missing_customers": 6718
+    },
+    {
+      "month": "2011-05",
+      "rows": 37030,
+      "missing_customers": 8122
+    },
+    {
+      "month": "2011-06",
+      "rows": 36874,
+      "missing_customers": 9038
+    },
+    {
+      "month": "2011-07",
+      "rows": 39518,
+      "missing_customers": 12016
+    },
+    {
+      "month": "2011-08",
+      "rows": 35284,
+      "missing_customers": 7622
+    },
+    {
+      "month": "2011-09",
+      "rows": 50226,
+      "missing_customers": 9404
+    },
+    {
+      "month": "2011-10",
+      "rows": 60742,
+      "missing_customers": 10047
+    },
+    {
+      "month": "2011-11",
+      "rows": 84711,
+      "missing_customers": 19113
+    },
+    {
+      "month": "2011-12",
+      "rows": 25526,
+      "missing_customers": 7864
+    }
+  ],
+  "invoice_multi_country": 0,
+  "invoice_multi_customer": 0,
+  "missingness_pct": {
+    "missing_customers": 22.7669,
+    "missing_descriptions": 0.4105,
+    "duplicate_extra_rows": 3.2168
+  },
+  "orphan_counts": [
+    0,
+    0,
+    0
+  ],
+  "sales_summary": [
+    "20972594.568000",
+    40077,
+    "1527041.430000",
+    5878
+  ],
+  "mysql_counts": {
+    "original_orders": "5",
+    "retail_lines": "1067371",
+    "retail_metrics": "8",
+    "original_metrics": "2"
+  },
+  "reader_select_only": true,
+  "app_health": {
+    "mode": "llm_rag",
+    "ready": true,
+    "missing_configuration": [],
+    "dependency_error": null,
+    "rule_fallback": false,
+    "dataset": {
+      "id": "retail_ii",
+      "name": "UCI Online Retail II · 真实历史零售数据",
+      "coverage": "2009-12-01 至 2011-12-09（首尾年份不完整）",
+      "source_url": "https://archive.ics.uci.edu/dataset/502/online+retail+ii",
+      "notice": "金额为英镑 GBP；保留原始重复记录。销售口径排除取消单、非正数量与非正价格；取消金额不代表实际退款。仅支持描述性统计，不证明因果。",
+      "examples": [
+        "2010年的销售额和去重订单数是多少？",
+        "按国家统计2011年11月的销售额，取前10名",
+        "比较2011年11月和2010年11月的平均订单金额"
+      ]
+    }
+  },
+  "unauthorized_status": 401,
+  "vector_counts": {
+    "retail-ii-column-v1": 84,
+    "retail-ii-metric-v1": 38,
+    "data-agent-column": 91,
+    "data-agent-metric": 8
+  },
+  "value_count": 83,
+  "checked_at_utc": "2026-09-27T02:29:52.068999+00:00"
+}

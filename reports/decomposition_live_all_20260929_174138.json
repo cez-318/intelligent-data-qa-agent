@@ -1,0 +1,3325 @@
+{
+  "started_at_utc": "2026-09-29T09:41:38.403219+00:00",
+  "benchmark_sha256": "18f7c300bb98e3f89e3e903bf75222df0ab7a1ac7d3cbf5916d963daed08b2d5",
+  "checker_sha256": "7e1ed262345e4c0523ab3fd5025347e2cda04045b12f2842c75480b82e38047e",
+  "application_sha256": "76e62b25f0f1ad9b5e513a1828a1ff2849bda75b930cc1eba9b672ac588ba1a4",
+  "evaluator_sha256": "49d3e93f6dbc4649c9aa3df11629fd3b87d1b9d31254208f3b9f7342d8676a7f",
+  "provider": "deepseek",
+  "model": "deepseek-flash",
+  "workers": 2,
+  "split": "all",
+  "rule_fallback": false,
+  "limitation": "20 targeted cases, 6 development (includes old country omission regression), 14 held-out instances. Shared templates; not broad business accuracy.",
+  "cases": [
+    {
+      "id": "decomposition-01",
+      "family": "segment_country",
+      "split": "development",
+      "question": "2011年第一季度相比2010年第一季度，按国家分解销售额增减贡献，展示绝对变化最大的前5组并给出其余贡献",
+      "passed": true,
+      "elapsed_seconds": 7.051,
+      "http_status": 200,
+      "request_id": "b8e835777d86485681d6a1d0f1727ed3",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "fact_retail_line__country": "United Kingdom",
+            "current": "1577548.210000",
+            "previous": "1688090.589000",
+            "difference": "-110542.379000",
+            "contribution_percent": "103.32747695818343623655515662137040487132112814763",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__country": "EIRE",
+            "current": "56350.440000",
+            "previous": "109786.690000",
+            "difference": "-53436.250000",
+            "contribution_percent": "49.948562176382413884865102170532301438031595411734",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__country": "Australia",
+            "current": "40937.120000",
+            "previous": "1459.050000",
+            "difference": "39478.070000",
+            "contribution_percent": "-36.901407452779289005416294070886825580607022122176",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__country": "Denmark",
+            "current": "4378.210000",
+            "previous": "35275.680000",
+            "difference": "-30897.470000",
+            "contribution_percent": "28.880847765101599411171310643261019770521660451214",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__country": "France",
+            "current": "40845.630000",
+            "previous": "26147.380000",
+            "difference": "14698.250000",
+            "contribution_percent": "-13.738921687225671990141869760284945137646221380814",
+            "presence": "both"
+          }
+        ],
+        "comparison_data": [
+          {
+            "SALES_AMOUNT": "2039618.369000"
+          }
+        ],
+        "analysis": null,
+        "evidence": {
+          "mode": "llm_rag",
+          "query_plan": {
+            "analysis": "segments",
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [
+              "fact_retail_line.country"
+            ],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "in",
+                "value": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            ],
+            "comparison_filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "in",
+                "value": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            ],
+            "order_by": null,
+            "descending": true,
+            "limit": 5
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "analysis_version": "accounting_decomposition_v1",
+          "analysis_queries": [
+            {
+              "name": "current_groups",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, fact_retail_line.country AS fact_retail_line__country, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month IN (:p1_0, :p1_1, :p1_2) GROUP BY fact_retail_line.country HAVING COUNT(*) > 0 LIMIT 10001",
+              "params": {
+                "p0": 2011,
+                "p1_0": 1,
+                "p1_1": 2,
+                "p1_2": 3
+              }
+            },
+            {
+              "name": "current_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month IN (:p1_0, :p1_1, :p1_2) HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": 2011,
+                "p1_0": 1,
+                "p1_1": 2,
+                "p1_2": 3
+              }
+            },
+            {
+              "name": "previous_groups",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, fact_retail_line.country AS fact_retail_line__country, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month IN (:p1_0, :p1_1, :p1_2) GROUP BY fact_retail_line.country HAVING COUNT(*) > 0 LIMIT 10001",
+              "params": {
+                "p0": 2010,
+                "p1_0": 1,
+                "p1_1": 2,
+                "p1_2": 3
+              }
+            },
+            {
+              "name": "previous_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month IN (:p1_0, :p1_1, :p1_2) HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": 2010,
+                "p1_0": 1,
+                "p1_1": 2,
+                "p1_2": 3
+              }
+            }
+          ],
+          "snapshot": "repeatable_read_read_only",
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "dataset_notice": "仅覆盖已加载历史快照；首尾年份可能不完整，不代表政策因果。",
+          "possibly_truncated": false
+        },
+        "execution_ms": 914.86,
+        "summary": "完整核对 37 个分组，展示绝对变化最大的 5 组；其余贡献单列。不是因果解释。",
+        "decomposition": {
+          "kind": "segments",
+          "metric": "SALES_AMOUNT",
+          "dimension": "fact_retail_line__country",
+          "current": "1932635.810000",
+          "previous": "2039618.369000",
+          "difference": "-106982.559000",
+          "group_count": 37,
+          "rows": [
+            {
+              "group": "United Kingdom",
+              "current": "1577548.210000",
+              "previous": "1688090.589000",
+              "difference": "-110542.379000",
+              "presence": "both",
+              "contribution_percent": "103.32747695818343623655515662137040487132112814763"
+            },
+            {
+              "group": "EIRE",
+              "current": "56350.440000",
+              "previous": "109786.690000",
+              "difference": "-53436.250000",
+              "presence": "both",
+              "contribution_percent": "49.948562176382413884865102170532301438031595411734"
+            },
+            {
+              "group": "Australia",
+              "current": "40937.120000",
+              "previous": "1459.050000",
+              "difference": "39478.070000",
+              "presence": "both",
+              "contribution_percent": "-36.901407452779289005416294070886825580607022122176"
+            },
+            {
+              "group": "Denmark",
+              "current": "4378.210000",
+              "previous": "35275.680000",
+              "difference": "-30897.470000",
+              "presence": "both",
+              "contribution_percent": "28.880847765101599411171310643261019770521660451214"
+            },
+            {
+              "group": "France",
+              "current": "40845.630000",
+              "previous": "26147.380000",
+              "difference": "14698.250000",
+              "presence": "both",
+              "contribution_percent": "-13.738921687225671990141869760284945137646221380814"
+            }
+          ],
+          "remainder": {
+            "current": "212576.200000",
+            "previous": "178858.980000",
+            "difference": "33717.220000",
+            "group_count": 32,
+            "contribution_percent": "-31.516557759662488537033405603991955361621140507585"
+          },
+          "gross_movement": "339663.559000",
+          "reconciliation_residual": "0.000000",
+          "causal": false,
+          "missing_group_policy": "closed_snapshot_zero_only_after_complete_group_and_total_reconciliation",
+          "note": "会计贡献分解，不是因果效应。覆盖已加载历史快照；单侧缺组在完整分组与总额核对后按0计，不代表真实世界无业务。贡献率=分组变化/总变化，可为负或超过100%；总变化为0时不计算。按绝对变化排序，未展示分组归入其余。",
+          "status": "complete"
+        }
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "decomposition-02",
+      "family": "segment_country",
+      "split": "test",
+      "question": "2011年6月相比2010年6月，按国家分解销售额增减贡献，展示绝对变化最大的前5组并给出其余贡献",
+      "passed": true,
+      "elapsed_seconds": 6.983,
+      "http_status": 200,
+      "request_id": "3e203d2e870d4da9b41d6eea698d1782",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "fact_retail_line__country": "United Kingdom",
+            "current": "619510.670000",
+            "previous": "652412.490000",
+            "difference": "-32901.820000",
+            "contribution_percent": "-347.44090663332544858581421282059946608995370526814",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__country": "Australia",
+            "current": "25187.770000",
+            "previous": "3214.780000",
+            "difference": "21972.990000",
+            "contribution_percent": "232.03322998682120771804142871625046463690737674450",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__country": "France",
+            "current": "16348.410000",
+            "previous": "9172.540000",
+            "difference": "7175.870000",
+            "contribution_percent": "75.776682830399080863717771094515594904200317642686",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__country": "Norway",
+            "current": "5886.860000",
+            "previous": "0",
+            "difference": "5886.860000",
+            "contribution_percent": "62.164827830905957489946946913121346264319264690974",
+            "presence": "current_only"
+          },
+          {
+            "fact_retail_line__country": "Switzerland",
+            "current": "7904.150000",
+            "previous": "2362.470000",
+            "difference": "5541.680000",
+            "contribution_percent": "58.519751292535396884398337444665968303314973135539",
+            "presence": "both"
+          }
+        ],
+        "comparison_data": [
+          {
+            "SALES_AMOUNT": "752270.140000"
+          }
+        ],
+        "analysis": null,
+        "evidence": {
+          "mode": "llm_rag",
+          "query_plan": {
+            "analysis": "segments",
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [
+              "fact_retail_line.country"
+            ],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 6
+              }
+            ],
+            "comparison_filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 6
+              }
+            ],
+            "order_by": null,
+            "descending": true,
+            "limit": 5
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "analysis_version": "accounting_decomposition_v1",
+          "analysis_queries": [
+            {
+              "name": "current_groups",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, fact_retail_line.country AS fact_retail_line__country, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 GROUP BY fact_retail_line.country HAVING COUNT(*) > 0 LIMIT 10001",
+              "params": {
+                "p0": 2011,
+                "p1": 6
+              }
+            },
+            {
+              "name": "current_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": 2011,
+                "p1": 6
+              }
+            },
+            {
+              "name": "previous_groups",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, fact_retail_line.country AS fact_retail_line__country, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 GROUP BY fact_retail_line.country HAVING COUNT(*) > 0 LIMIT 10001",
+              "params": {
+                "p0": 2010,
+                "p1": 6
+              }
+            },
+            {
+              "name": "previous_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": 2010,
+                "p1": 6
+              }
+            }
+          ],
+          "snapshot": "repeatable_read_read_only",
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "dataset_notice": "仅覆盖已加载历史快照；首尾年份可能不完整，不代表政策因果。",
+          "possibly_truncated": false
+        },
+        "execution_ms": 649.81,
+        "summary": "完整核对 30 个分组，展示绝对变化最大的 5 组；其余贡献单列。不是因果解释。",
+        "decomposition": {
+          "kind": "segments",
+          "metric": "SALES_AMOUNT",
+          "dimension": "fact_retail_line__country",
+          "current": "761739.900000",
+          "previous": "752270.140000",
+          "difference": "9469.760000",
+          "group_count": 30,
+          "rows": [
+            {
+              "group": "United Kingdom",
+              "current": "619510.670000",
+              "previous": "652412.490000",
+              "difference": "-32901.820000",
+              "presence": "both",
+              "contribution_percent": "-347.44090663332544858581421282059946608995370526814"
+            },
+            {
+              "group": "Australia",
+              "current": "25187.770000",
+              "previous": "3214.780000",
+              "difference": "21972.990000",
+              "presence": "both",
+              "contribution_percent": "232.03322998682120771804142871625046463690737674450"
+            },
+            {
+              "group": "France",
+              "current": "16348.410000",
+              "previous": "9172.540000",
+              "difference": "7175.870000",
+              "presence": "both",
+              "contribution_percent": "75.776682830399080863717771094515594904200317642686"
+            },
+            {
+              "group": "Norway",
+              "current": "5886.860000",
+              "previous": "0",
+              "difference": "5886.860000",
+              "presence": "current_only",
+              "contribution_percent": "62.164827830905957489946946913121346264319264690974"
+            },
+            {
+              "group": "Switzerland",
+              "current": "7904.150000",
+              "previous": "2362.470000",
+              "difference": "5541.680000",
+              "presence": "both",
+              "contribution_percent": "58.519751292535396884398337444665968303314973135539"
+            }
+          ],
+          "remainder": {
+            "current": "86902.040000",
+            "previous": "85107.860000",
+            "difference": "1794.180000",
+            "group_count": 25,
+            "contribution_percent": "18.946414692663805629709728652046091981211773054439"
+          },
+          "gross_movement": "96656.760000",
+          "reconciliation_residual": "0.000000",
+          "causal": false,
+          "missing_group_policy": "closed_snapshot_zero_only_after_complete_group_and_total_reconciliation",
+          "note": "会计贡献分解，不是因果效应。覆盖已加载历史快照；单侧缺组在完整分组与总额核对后按0计，不代表真实世界无业务。贡献率=分组变化/总变化，可为负或超过100%；总变化为0时不计算。按绝对变化排序，未展示分组归入其余。",
+          "status": "complete"
+        }
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "decomposition-03",
+      "family": "segment_country",
+      "split": "test",
+      "question": "2011年9月相比2011年8月，按国家分解销售额增减贡献，展示绝对变化最大的前5组并给出其余贡献",
+      "passed": true,
+      "elapsed_seconds": 8.499,
+      "http_status": 200,
+      "request_id": "b48fb720450242889694883f84c1b2c3",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "fact_retail_line__country": "United Kingdom",
+            "current": "897076.472000",
+            "previous": "608047.480000",
+            "difference": "289028.992000",
+            "contribution_percent": "96.519372974732440405632970798852324116330551129245",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__country": "EIRE",
+            "current": "43086.550000",
+            "previous": "18353.750000",
+            "difference": "24732.800000",
+            "contribution_percent": "8.2593594898239914356565279796355334550811437455014",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__country": "Australia",
+            "current": "5106.730000",
+            "previous": "22489.200000",
+            "difference": "-17382.470000",
+            "contribution_percent": "-5.8047640603199328992494391217401697833219178063894",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__country": "Netherlands",
+            "current": "26937.260000",
+            "previous": "40327.810000",
+            "difference": "-13390.550000",
+            "contribution_percent": "-4.4716880505427063866093010390133180435266855908480",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__country": "France",
+            "current": "23428.040000",
+            "previous": "13810.960000",
+            "difference": "9617.080000",
+            "contribution_percent": "3.2115620132939461587860526144388543181601664951800",
+            "presence": "both"
+          }
+        ],
+        "comparison_data": [
+          {
+            "SALES_AMOUNT": "759138.380000"
+          }
+        ],
+        "analysis": null,
+        "evidence": {
+          "mode": "llm_rag",
+          "query_plan": {
+            "analysis": "segments",
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [
+              "fact_retail_line.country"
+            ],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 9
+              }
+            ],
+            "comparison_filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 8
+              }
+            ],
+            "order_by": null,
+            "descending": true,
+            "limit": 5
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "analysis_version": "accounting_decomposition_v1",
+          "analysis_queries": [
+            {
+              "name": "current_groups",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, fact_retail_line.country AS fact_retail_line__country, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 GROUP BY fact_retail_line.country HAVING COUNT(*) > 0 LIMIT 10001",
+              "params": {
+                "p0": 2011,
+                "p1": 9
+              }
+            },
+            {
+              "name": "current_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": 2011,
+                "p1": 9
+              }
+            },
+            {
+              "name": "previous_groups",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, fact_retail_line.country AS fact_retail_line__country, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 GROUP BY fact_retail_line.country HAVING COUNT(*) > 0 LIMIT 10001",
+              "params": {
+                "p0": 2011,
+                "p1": 8
+              }
+            },
+            {
+              "name": "previous_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": 2011,
+                "p1": 8
+              }
+            }
+          ],
+          "snapshot": "repeatable_read_read_only",
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "dataset_notice": "仅覆盖已加载历史快照；首尾年份可能不完整，不代表政策因果。",
+          "possibly_truncated": false
+        },
+        "execution_ms": 412.95,
+        "summary": "完整核对 27 个分组，展示绝对变化最大的 5 组；其余贡献单列。不是因果解释。",
+        "decomposition": {
+          "kind": "segments",
+          "metric": "SALES_AMOUNT",
+          "dimension": "fact_retail_line__country",
+          "current": "1058590.172000",
+          "previous": "759138.380000",
+          "difference": "299451.792000",
+          "group_count": 27,
+          "rows": [
+            {
+              "group": "United Kingdom",
+              "current": "897076.472000",
+              "previous": "608047.480000",
+              "difference": "289028.992000",
+              "presence": "both",
+              "contribution_percent": "96.519372974732440405632970798852324116330551129245"
+            },
+            {
+              "group": "EIRE",
+              "current": "43086.550000",
+              "previous": "18353.750000",
+              "difference": "24732.800000",
+              "presence": "both",
+              "contribution_percent": "8.2593594898239914356565279796355334550811437455014"
+            },
+            {
+              "group": "Australia",
+              "current": "5106.730000",
+              "previous": "22489.200000",
+              "difference": "-17382.470000",
+              "presence": "both",
+              "contribution_percent": "-5.8047640603199328992494391217401697833219178063894"
+            },
+            {
+              "group": "Netherlands",
+              "current": "26937.260000",
+              "previous": "40327.810000",
+              "difference": "-13390.550000",
+              "presence": "both",
+              "contribution_percent": "-4.4716880505427063866093010390133180435266855908480"
+            },
+            {
+              "group": "France",
+              "current": "23428.040000",
+              "previous": "13810.960000",
+              "difference": "9617.080000",
+              "presence": "both",
+              "contribution_percent": "3.2115620132939461587860526144388543181601664951800"
+            }
+          ],
+          "remainder": {
+            "current": "62955.120000",
+            "previous": "56109.180000",
+            "difference": "6845.940000",
+            "group_count": 22,
+            "contribution_percent": "2.2861576330122612857831887678267759372767420273110"
+          },
+          "gross_movement": "390619.012000",
+          "reconciliation_residual": "0.000000",
+          "causal": false,
+          "missing_group_policy": "closed_snapshot_zero_only_after_complete_group_and_total_reconciliation",
+          "note": "会计贡献分解，不是因果效应。覆盖已加载历史快照；单侧缺组在完整分组与总额核对后按0计，不代表真实世界无业务。贡献率=分组变化/总变化，可为负或超过100%；总变化为0时不计算。按绝对变化排序，未展示分组归入其余。",
+          "status": "complete"
+        }
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "decomposition-04",
+      "family": "segment_country",
+      "split": "test",
+      "question": "2011年11月相比2010年11月，按国家分解销售额增减贡献，展示绝对变化最大的前5组并给出其余贡献",
+      "passed": true,
+      "elapsed_seconds": 8.528,
+      "http_status": 200,
+      "request_id": "ada54527e863410297cf1c84f89ae335",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "fact_retail_line__country": "United Kingdom",
+            "current": "1325346.210000",
+            "previous": "1275581.142000",
+            "difference": "49765.068000",
+            "contribution_percent": "126.87451776786408105599430224184021924620960187282",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__country": "France",
+            "current": "31758.710000",
+            "previous": "19618.270000",
+            "difference": "12140.440000",
+            "contribution_percent": "30.951680212507452099039339536498305826598145087652",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__country": "Australia",
+            "current": "7242.720000",
+            "previous": "18245.520000",
+            "difference": "-11002.800000",
+            "contribution_percent": "-28.051301850853592946821535714700913587060606598312",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__country": "Netherlands",
+            "current": "25874.010000",
+            "previous": "36058.740000",
+            "difference": "-10184.730000",
+            "contribution_percent": "-25.965657423514388491409613865523851713885899211113",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__country": "Japan",
+            "current": "8460.080000",
+            "previous": "23.600000",
+            "difference": "8436.480000",
+            "contribution_percent": "21.508547555048653054131761881190239162664509611602",
+            "presence": "both"
+          }
+        ],
+        "comparison_data": [
+          {
+            "SALES_AMOUNT": "1470272.482000"
+          }
+        ],
+        "analysis": null,
+        "evidence": {
+          "mode": "llm_rag",
+          "query_plan": {
+            "analysis": "segments",
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [
+              "fact_retail_line.country"
+            ],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 11
+              }
+            ],
+            "comparison_filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 11
+              }
+            ],
+            "order_by": null,
+            "descending": true,
+            "limit": 5
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "analysis_version": "accounting_decomposition_v1",
+          "analysis_queries": [
+            {
+              "name": "current_groups",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, fact_retail_line.country AS fact_retail_line__country, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 GROUP BY fact_retail_line.country HAVING COUNT(*) > 0 LIMIT 10001",
+              "params": {
+                "p0": 2011,
+                "p1": 11
+              }
+            },
+            {
+              "name": "current_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": 2011,
+                "p1": 11
+              }
+            },
+            {
+              "name": "previous_groups",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, fact_retail_line.country AS fact_retail_line__country, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 GROUP BY fact_retail_line.country HAVING COUNT(*) > 0 LIMIT 10001",
+              "params": {
+                "p0": 2010,
+                "p1": 11
+              }
+            },
+            {
+              "name": "previous_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": 2010,
+                "p1": 11
+              }
+            }
+          ],
+          "snapshot": "repeatable_read_read_only",
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "dataset_notice": "仅覆盖已加载历史快照；首尾年份可能不完整，不代表政策因果。",
+          "possibly_truncated": false
+        },
+        "execution_ms": 1522.8,
+        "summary": "完整核对 32 个分组，展示绝对变化最大的 5 组；其余贡献单列。不是因果解释。",
+        "decomposition": {
+          "kind": "segments",
+          "metric": "SALES_AMOUNT",
+          "dimension": "fact_retail_line__country",
+          "current": "1509496.330000",
+          "previous": "1470272.482000",
+          "difference": "39223.848000",
+          "group_count": 32,
+          "rows": [
+            {
+              "group": "United Kingdom",
+              "current": "1325346.210000",
+              "previous": "1275581.142000",
+              "difference": "49765.068000",
+              "presence": "both",
+              "contribution_percent": "126.87451776786408105599430224184021924620960187282"
+            },
+            {
+              "group": "France",
+              "current": "31758.710000",
+              "previous": "19618.270000",
+              "difference": "12140.440000",
+              "presence": "both",
+              "contribution_percent": "30.951680212507452099039339536498305826598145087652"
+            },
+            {
+              "group": "Australia",
+              "current": "7242.720000",
+              "previous": "18245.520000",
+              "difference": "-11002.800000",
+              "presence": "both",
+              "contribution_percent": "-28.051301850853592946821535714700913587060606598312"
+            },
+            {
+              "group": "Netherlands",
+              "current": "25874.010000",
+              "previous": "36058.740000",
+              "difference": "-10184.730000",
+              "presence": "both",
+              "contribution_percent": "-25.965657423514388491409613865523851713885899211113"
+            },
+            {
+              "group": "Japan",
+              "current": "8460.080000",
+              "previous": "23.600000",
+              "difference": "8436.480000",
+              "presence": "both",
+              "contribution_percent": "21.508547555048653054131761881190239162664509611602"
+            }
+          ],
+          "remainder": {
+            "current": "110814.600000",
+            "previous": "120745.210000",
+            "difference": "-9930.610000",
+            "group_count": 27,
+            "contribution_percent": "-25.317786261052204770934254079303998934525750762648"
+          },
+          "gross_movement": "127366.728000",
+          "reconciliation_residual": "0.000000",
+          "causal": false,
+          "missing_group_policy": "closed_snapshot_zero_only_after_complete_group_and_total_reconciliation",
+          "note": "会计贡献分解，不是因果效应。覆盖已加载历史快照；单侧缺组在完整分组与总额核对后按0计，不代表真实世界无业务。贡献率=分组变化/总变化，可为负或超过100%；总变化为0时不计算。按绝对变化排序，未展示分组归入其余。",
+          "status": "complete"
+        }
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "decomposition-05",
+      "family": "segment_stock_code",
+      "split": "development",
+      "question": "2011年第一季度相比2010年第一季度，按商品代码分解销售额增减贡献，展示绝对变化最大的前5组并给出其余贡献",
+      "passed": true,
+      "elapsed_seconds": 7.687,
+      "http_status": 200,
+      "request_id": "123f618c73584e169c74008079849eec",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "fact_retail_line__stock_code": "23166",
+            "current": "77183.600000",
+            "previous": "0",
+            "difference": "77183.600000",
+            "contribution_percent": "-72.145965399836808913871652668169958432196410631755",
+            "presence": "current_only"
+          },
+          {
+            "fact_retail_line__stock_code": "M",
+            "current": "9570.730000",
+            "previous": "74726.370000",
+            "difference": "-65155.640000",
+            "contribution_percent": "60.903048692263941826255997484599335486076753875368",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__stock_code": "22423",
+            "current": "42182.090000",
+            "previous": "9890.610000",
+            "difference": "32291.480000",
+            "contribution_percent": "-30.183873242366543129707712450587389669749814079508",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__stock_code": "22720",
+            "current": "12845.190000",
+            "previous": "0",
+            "difference": "12845.190000",
+            "contribution_percent": "-12.006807576924758361781194633790728449484929594926",
+            "presence": "current_only"
+          },
+          {
+            "fact_retail_line__stock_code": "20748",
+            "current": "202.920000",
+            "previous": "11342.940000",
+            "difference": "-11140.020000",
+            "contribution_percent": "10.412930952605087713409435270659397855682251907996",
+            "presence": "both"
+          }
+        ],
+        "comparison_data": [
+          {
+            "SALES_AMOUNT": "2039618.369000"
+          }
+        ],
+        "analysis": null,
+        "evidence": {
+          "mode": "llm_rag",
+          "query_plan": {
+            "analysis": "segments",
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [
+              "fact_retail_line.stock_code"
+            ],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "in",
+                "value": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            ],
+            "comparison_filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "in",
+                "value": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            ],
+            "order_by": null,
+            "descending": true,
+            "limit": 5
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "analysis_version": "accounting_decomposition_v1",
+          "analysis_queries": [
+            {
+              "name": "current_groups",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, fact_retail_line.stock_code AS fact_retail_line__stock_code, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month IN (:p1_0, :p1_1, :p1_2) GROUP BY fact_retail_line.stock_code HAVING COUNT(*) > 0 LIMIT 10001",
+              "params": {
+                "p0": 2011,
+                "p1_0": 1,
+                "p1_1": 2,
+                "p1_2": 3
+              }
+            },
+            {
+              "name": "current_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month IN (:p1_0, :p1_1, :p1_2) HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": 2011,
+                "p1_0": 1,
+                "p1_1": 2,
+                "p1_2": 3
+              }
+            },
+            {
+              "name": "previous_groups",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, fact_retail_line.stock_code AS fact_retail_line__stock_code, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month IN (:p1_0, :p1_1, :p1_2) GROUP BY fact_retail_line.stock_code HAVING COUNT(*) > 0 LIMIT 10001",
+              "params": {
+                "p0": 2010,
+                "p1_0": 1,
+                "p1_1": 2,
+                "p1_2": 3
+              }
+            },
+            {
+              "name": "previous_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month IN (:p1_0, :p1_1, :p1_2) HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": 2010,
+                "p1_0": 1,
+                "p1_1": 2,
+                "p1_2": 3
+              }
+            }
+          ],
+          "snapshot": "repeatable_read_read_only",
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "dataset_notice": "仅覆盖已加载历史快照；首尾年份可能不完整，不代表政策因果。",
+          "possibly_truncated": false
+        },
+        "execution_ms": 857.16,
+        "summary": "完整核对 4360 个分组，展示绝对变化最大的 5 组；其余贡献单列。不是因果解释。",
+        "decomposition": {
+          "kind": "segments",
+          "metric": "SALES_AMOUNT",
+          "dimension": "fact_retail_line__stock_code",
+          "current": "1932635.810000",
+          "previous": "2039618.369000",
+          "difference": "-106982.559000",
+          "group_count": 4360,
+          "rows": [
+            {
+              "group": "23166",
+              "current": "77183.600000",
+              "previous": "0",
+              "difference": "77183.600000",
+              "presence": "current_only",
+              "contribution_percent": "-72.145965399836808913871652668169958432196410631755"
+            },
+            {
+              "group": "M",
+              "current": "9570.730000",
+              "previous": "74726.370000",
+              "difference": "-65155.640000",
+              "presence": "both",
+              "contribution_percent": "60.903048692263941826255997484599335486076753875368"
+            },
+            {
+              "group": "22423",
+              "current": "42182.090000",
+              "previous": "9890.610000",
+              "difference": "32291.480000",
+              "presence": "both",
+              "contribution_percent": "-30.183873242366543129707712450587389669749814079508"
+            },
+            {
+              "group": "22720",
+              "current": "12845.190000",
+              "previous": "0",
+              "difference": "12845.190000",
+              "presence": "current_only",
+              "contribution_percent": "-12.006807576924758361781194633790728449484929594926"
+            },
+            {
+              "group": "20748",
+              "current": "202.920000",
+              "previous": "11342.940000",
+              "difference": "-11140.020000",
+              "presence": "both",
+              "contribution_percent": "10.412930952605087713409435270659397855682251907996"
+            }
+          ],
+          "remainder": {
+            "current": "1790651.280000",
+            "previous": "1943658.449000",
+            "difference": "-153007.169000",
+            "group_count": 4355,
+            "contribution_percent": "143.02066657425908086569512699728934320967214852283"
+          },
+          "gross_movement": "1879653.599000",
+          "reconciliation_residual": "0.000000",
+          "causal": false,
+          "missing_group_policy": "closed_snapshot_zero_only_after_complete_group_and_total_reconciliation",
+          "note": "会计贡献分解，不是因果效应。覆盖已加载历史快照；单侧缺组在完整分组与总额核对后按0计，不代表真实世界无业务。贡献率=分组变化/总变化，可为负或超过100%；总变化为0时不计算。按绝对变化排序，未展示分组归入其余。",
+          "status": "complete"
+        }
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "decomposition-06",
+      "family": "segment_stock_code",
+      "split": "test",
+      "question": "2011年6月相比2010年6月，按商品代码分解销售额增减贡献，展示绝对变化最大的前5组并给出其余贡献",
+      "passed": true,
+      "elapsed_seconds": 8.758,
+      "http_status": 200,
+      "request_id": "7ed3039aa2db45cc845eb096ee4fbc89",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "fact_retail_line__stock_code": "22502",
+            "current": "40618.900000",
+            "previous": "1784.760000",
+            "difference": "38834.140000",
+            "contribution_percent": "410.08578886898928800729902341770013178792281958571",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__stock_code": "M",
+            "current": "4927.880000",
+            "previous": "43177.020000",
+            "difference": "-38249.140000",
+            "contribution_percent": "-403.90822998682120771804142871625046463690737674450",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__stock_code": "15044A",
+            "current": "202.890000",
+            "previous": "9466.260000",
+            "difference": "-9263.370000",
+            "contribution_percent": "-97.820536106511675058290812016355219139661406413679",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__stock_code": "23173",
+            "current": "7399.840000",
+            "previous": "0",
+            "difference": "7399.840000",
+            "contribution_percent": "78.141790288243841448991315513803940120974554793363",
+            "presence": "current_only"
+          },
+          {
+            "fact_retail_line__stock_code": "85123A",
+            "current": "4680.810000",
+            "previous": "11766.570000",
+            "difference": "-7085.760000",
+            "contribution_percent": "-74.825127563950934342581015780758963268340485925726",
+            "presence": "both"
+          }
+        ],
+        "comparison_data": [
+          {
+            "SALES_AMOUNT": "752270.140000"
+          }
+        ],
+        "analysis": null,
+        "evidence": {
+          "mode": "llm_rag",
+          "query_plan": {
+            "analysis": "segments",
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [
+              "fact_retail_line.stock_code"
+            ],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 6
+              }
+            ],
+            "comparison_filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 6
+              }
+            ],
+            "order_by": null,
+            "descending": true,
+            "limit": 5
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "analysis_version": "accounting_decomposition_v1",
+          "analysis_queries": [
+            {
+              "name": "current_groups",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, fact_retail_line.stock_code AS fact_retail_line__stock_code, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 GROUP BY fact_retail_line.stock_code HAVING COUNT(*) > 0 LIMIT 10001",
+              "params": {
+                "p0": 2011,
+                "p1": 6
+              }
+            },
+            {
+              "name": "current_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": 2011,
+                "p1": 6
+              }
+            },
+            {
+              "name": "previous_groups",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, fact_retail_line.stock_code AS fact_retail_line__stock_code, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 GROUP BY fact_retail_line.stock_code HAVING COUNT(*) > 0 LIMIT 10001",
+              "params": {
+                "p0": 2010,
+                "p1": 6
+              }
+            },
+            {
+              "name": "previous_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": 2010,
+                "p1": 6
+              }
+            }
+          ],
+          "snapshot": "repeatable_read_read_only",
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "dataset_notice": "仅覆盖已加载历史快照；首尾年份可能不完整，不代表政策因果。",
+          "possibly_truncated": false
+        },
+        "execution_ms": 995.94,
+        "summary": "完整核对 3591 个分组，展示绝对变化最大的 5 组；其余贡献单列。不是因果解释。",
+        "decomposition": {
+          "kind": "segments",
+          "metric": "SALES_AMOUNT",
+          "dimension": "fact_retail_line__stock_code",
+          "current": "761739.900000",
+          "previous": "752270.140000",
+          "difference": "9469.760000",
+          "group_count": 3591,
+          "rows": [
+            {
+              "group": "22502",
+              "current": "40618.900000",
+              "previous": "1784.760000",
+              "difference": "38834.140000",
+              "presence": "both",
+              "contribution_percent": "410.08578886898928800729902341770013178792281958571"
+            },
+            {
+              "group": "M",
+              "current": "4927.880000",
+              "previous": "43177.020000",
+              "difference": "-38249.140000",
+              "presence": "both",
+              "contribution_percent": "-403.90822998682120771804142871625046463690737674450"
+            },
+            {
+              "group": "15044A",
+              "current": "202.890000",
+              "previous": "9466.260000",
+              "difference": "-9263.370000",
+              "presence": "both",
+              "contribution_percent": "-97.820536106511675058290812016355219139661406413679"
+            },
+            {
+              "group": "23173",
+              "current": "7399.840000",
+              "previous": "0",
+              "difference": "7399.840000",
+              "presence": "current_only",
+              "contribution_percent": "78.141790288243841448991315513803940120974554793363"
+            },
+            {
+              "group": "85123A",
+              "current": "4680.810000",
+              "previous": "11766.570000",
+              "difference": "-7085.760000",
+              "presence": "both",
+              "contribution_percent": "-74.825127563950934342581015780758963268340485925726"
+            }
+          ],
+          "remainder": {
+            "current": "703909.580000",
+            "previous": "686075.530000",
+            "difference": "17834.050000",
+            "group_count": 3586,
+            "contribution_percent": "188.32631450005068766262291758186057513601189470483"
+          },
+          "gross_movement": "790193.100000",
+          "reconciliation_residual": "0.000000",
+          "causal": false,
+          "missing_group_policy": "closed_snapshot_zero_only_after_complete_group_and_total_reconciliation",
+          "note": "会计贡献分解，不是因果效应。覆盖已加载历史快照；单侧缺组在完整分组与总额核对后按0计，不代表真实世界无业务。贡献率=分组变化/总变化，可为负或超过100%；总变化为0时不计算。按绝对变化排序，未展示分组归入其余。",
+          "status": "complete"
+        }
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "decomposition-07",
+      "family": "segment_stock_code",
+      "split": "test",
+      "question": "2011年9月相比2011年8月，按商品代码分解销售额增减贡献，展示绝对变化最大的前5组并给出其余贡献",
+      "passed": true,
+      "elapsed_seconds": 7.332,
+      "http_status": 200,
+      "request_id": "20297eebdeb14de3a50a0d99605191bb",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "dim_product__stock_code": "B",
+            "current": "0",
+            "previous": "11062.060000",
+            "difference": "-11062.060000",
+            "contribution_percent": "-3.6941037908365564230786102625827665776666983512324",
+            "presence": "previous_only"
+          },
+          {
+            "dim_product__stock_code": "23243",
+            "current": "9981.410000",
+            "previous": "3339.870000",
+            "difference": "6641.540000",
+            "contribution_percent": "2.2178995676205537617888090647993183490449774967451",
+            "presence": "both"
+          },
+          {
+            "dim_product__stock_code": "23355",
+            "current": "6313.940000",
+            "previous": "593.520000",
+            "difference": "5720.420000",
+            "contribution_percent": "1.9102974678475124971033734872423137811778398040109",
+            "presence": "both"
+          },
+          {
+            "dim_product__stock_code": "21181",
+            "current": "5058.390000",
+            "previous": "2.100000",
+            "difference": "5056.290000",
+            "contribution_percent": "1.6885155257310999828646876155611718630156001871580",
+            "presence": "both"
+          },
+          {
+            "dim_product__stock_code": "23113",
+            "current": "4977.200000",
+            "previous": "0",
+            "difference": "4977.200000",
+            "contribution_percent": "1.6621039289021853641136333557155670652991116513338",
+            "presence": "current_only"
+          }
+        ],
+        "comparison_data": [
+          {
+            "SALES_AMOUNT": "759138.380000"
+          }
+        ],
+        "analysis": null,
+        "evidence": {
+          "mode": "llm_rag",
+          "query_plan": {
+            "analysis": "segments",
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [
+              "dim_product.stock_code"
+            ],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 9
+              }
+            ],
+            "comparison_filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 8
+              }
+            ],
+            "order_by": null,
+            "descending": true,
+            "limit": 5
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "analysis_version": "accounting_decomposition_v1",
+          "analysis_queries": [
+            {
+              "name": "current_groups",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, dim_product.stock_code AS dim_product__stock_code, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_product ON fact_retail_line.stock_code = dim_product.stock_code WHERE dim_date.year = :p0 AND dim_date.month = :p1 GROUP BY dim_product.stock_code HAVING COUNT(*) > 0 LIMIT 10001",
+              "params": {
+                "p0": 2011,
+                "p1": 9
+              }
+            },
+            {
+              "name": "current_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": 2011,
+                "p1": 9
+              }
+            },
+            {
+              "name": "previous_groups",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, dim_product.stock_code AS dim_product__stock_code, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_product ON fact_retail_line.stock_code = dim_product.stock_code WHERE dim_date.year = :p0 AND dim_date.month = :p1 GROUP BY dim_product.stock_code HAVING COUNT(*) > 0 LIMIT 10001",
+              "params": {
+                "p0": 2011,
+                "p1": 8
+              }
+            },
+            {
+              "name": "previous_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": 2011,
+                "p1": 8
+              }
+            }
+          ],
+          "snapshot": "repeatable_read_read_only",
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "dataset_notice": "仅覆盖已加载历史快照；首尾年份可能不完整，不代表政策因果。",
+          "possibly_truncated": false
+        },
+        "execution_ms": 560.37,
+        "summary": "完整核对 2982 个分组，展示绝对变化最大的 5 组；其余贡献单列。不是因果解释。",
+        "decomposition": {
+          "kind": "segments",
+          "metric": "SALES_AMOUNT",
+          "dimension": "dim_product__stock_code",
+          "current": "1058590.172000",
+          "previous": "759138.380000",
+          "difference": "299451.792000",
+          "group_count": 2982,
+          "rows": [
+            {
+              "group": "B",
+              "current": "0",
+              "previous": "11062.060000",
+              "difference": "-11062.060000",
+              "presence": "previous_only",
+              "contribution_percent": "-3.6941037908365564230786102625827665776666983512324"
+            },
+            {
+              "group": "23243",
+              "current": "9981.410000",
+              "previous": "3339.870000",
+              "difference": "6641.540000",
+              "presence": "both",
+              "contribution_percent": "2.2178995676205537617888090647993183490449774967451"
+            },
+            {
+              "group": "23355",
+              "current": "6313.940000",
+              "previous": "593.520000",
+              "difference": "5720.420000",
+              "presence": "both",
+              "contribution_percent": "1.9102974678475124971033734872423137811778398040109"
+            },
+            {
+              "group": "21181",
+              "current": "5058.390000",
+              "previous": "2.100000",
+              "difference": "5056.290000",
+              "presence": "both",
+              "contribution_percent": "1.6885155257310999828646876155611718630156001871580"
+            },
+            {
+              "group": "23113",
+              "current": "4977.200000",
+              "previous": "0",
+              "difference": "4977.200000",
+              "presence": "current_only",
+              "contribution_percent": "1.6621039289021853641136333557155670652991116513338"
+            }
+          ],
+          "remainder": {
+            "current": "1032259.232000",
+            "previous": "744140.830000",
+            "difference": "288118.402000",
+            "group_count": 2977,
+            "contribution_percent": "96.215287300735204817208106739264395519129169211985"
+          },
+          "gross_movement": "608420.112000",
+          "reconciliation_residual": "0.000000",
+          "causal": false,
+          "missing_group_policy": "closed_snapshot_zero_only_after_complete_group_and_total_reconciliation",
+          "note": "会计贡献分解，不是因果效应。覆盖已加载历史快照；单侧缺组在完整分组与总额核对后按0计，不代表真实世界无业务。贡献率=分组变化/总变化，可为负或超过100%；总变化为0时不计算。按绝对变化排序，未展示分组归入其余。",
+          "status": "complete"
+        }
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "decomposition-08",
+      "family": "segment_stock_code",
+      "split": "test",
+      "question": "2011年11月相比2010年11月，按商品代码分解销售额增减贡献，展示绝对变化最大的前5组并给出其余贡献",
+      "passed": true,
+      "elapsed_seconds": 7.067,
+      "http_status": 200,
+      "request_id": "ad55e37a27ba48a2946f6682848a85e6",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "fact_retail_line__stock_code": "23084",
+            "current": "34556.720000",
+            "previous": "0",
+            "difference": "34556.720000",
+            "contribution_percent": "88.101300005037751523002026726189638507675228600723",
+            "presence": "current_only"
+          },
+          {
+            "fact_retail_line__stock_code": "DOT",
+            "current": "36905.400000",
+            "previous": "15289.920000",
+            "difference": "21615.480000",
+            "contribution_percent": "55.108004701629478066506886320791371616573672221043",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__stock_code": "84347",
+            "current": "9633.540000",
+            "previous": "25710.940000",
+            "difference": "-16077.400000",
+            "contribution_percent": "-40.988839238822259356093772339725566956102828055014",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__stock_code": "22423",
+            "current": "13799.580000",
+            "previous": "28151.330000",
+            "difference": "-14351.750000",
+            "contribution_percent": "-36.589347378666162483599263386906863395962578684274",
+            "presence": "both"
+          },
+          {
+            "fact_retail_line__stock_code": "23355",
+            "current": "11824.420000",
+            "previous": "0",
+            "difference": "11824.420000",
+            "contribution_percent": "30.145996894542320274135265871925671341577705481624",
+            "presence": "current_only"
+          }
+        ],
+        "comparison_data": [
+          {
+            "SALES_AMOUNT": "1470272.482000"
+          }
+        ],
+        "analysis": null,
+        "evidence": {
+          "mode": "llm_rag",
+          "query_plan": {
+            "analysis": "segments",
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [
+              "fact_retail_line.stock_code"
+            ],
+            "filters": [
+              {
+                "field": "dim_date.year_month",
+                "op": "eq",
+                "value": "2011-11"
+              }
+            ],
+            "comparison_filters": [
+              {
+                "field": "dim_date.year_month",
+                "op": "eq",
+                "value": "2010-11"
+              }
+            ],
+            "order_by": null,
+            "descending": true,
+            "limit": 5
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "analysis_version": "accounting_decomposition_v1",
+          "analysis_queries": [
+            {
+              "name": "current_groups",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, fact_retail_line.stock_code AS fact_retail_line__stock_code, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year_month = :p0 GROUP BY fact_retail_line.stock_code HAVING COUNT(*) > 0 LIMIT 10001",
+              "params": {
+                "p0": "2011-11"
+              }
+            },
+            {
+              "name": "current_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year_month = :p0 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": "2011-11"
+              }
+            },
+            {
+              "name": "previous_groups",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, fact_retail_line.stock_code AS fact_retail_line__stock_code, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year_month = :p0 GROUP BY fact_retail_line.stock_code HAVING COUNT(*) > 0 LIMIT 10001",
+              "params": {
+                "p0": "2010-11"
+              }
+            },
+            {
+              "name": "previous_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year_month = :p0 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": "2010-11"
+              }
+            }
+          ],
+          "snapshot": "repeatable_read_read_only",
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "dataset_notice": "仅覆盖已加载历史快照；首尾年份可能不完整，不代表政策因果。",
+          "possibly_truncated": false
+        },
+        "execution_ms": 1338.4,
+        "summary": "完整核对 3896 个分组，展示绝对变化最大的 5 组；其余贡献单列。不是因果解释。",
+        "decomposition": {
+          "kind": "segments",
+          "metric": "SALES_AMOUNT",
+          "dimension": "fact_retail_line__stock_code",
+          "current": "1509496.330000",
+          "previous": "1470272.482000",
+          "difference": "39223.848000",
+          "group_count": 3896,
+          "rows": [
+            {
+              "group": "23084",
+              "current": "34556.720000",
+              "previous": "0",
+              "difference": "34556.720000",
+              "presence": "current_only",
+              "contribution_percent": "88.101300005037751523002026726189638507675228600723"
+            },
+            {
+              "group": "DOT",
+              "current": "36905.400000",
+              "previous": "15289.920000",
+              "difference": "21615.480000",
+              "presence": "both",
+              "contribution_percent": "55.108004701629478066506886320791371616573672221043"
+            },
+            {
+              "group": "84347",
+              "current": "9633.540000",
+              "previous": "25710.940000",
+              "difference": "-16077.400000",
+              "presence": "both",
+              "contribution_percent": "-40.988839238822259356093772339725566956102828055014"
+            },
+            {
+              "group": "22423",
+              "current": "13799.580000",
+              "previous": "28151.330000",
+              "difference": "-14351.750000",
+              "presence": "both",
+              "contribution_percent": "-36.589347378666162483599263386906863395962578684274"
+            },
+            {
+              "group": "23355",
+              "current": "11824.420000",
+              "previous": "0",
+              "difference": "11824.420000",
+              "presence": "current_only",
+              "contribution_percent": "30.145996894542320274135265871925671341577705481624"
+            }
+          ],
+          "remainder": {
+            "current": "1402776.670000",
+            "previous": "1401120.292000",
+            "difference": "1656.378000",
+            "group_count": 3891,
+            "contribution_percent": "4.2228850162788719760488568077257488862388004358981"
+          },
+          "gross_movement": "1261518.332000",
+          "reconciliation_residual": "0.000000",
+          "causal": false,
+          "missing_group_policy": "closed_snapshot_zero_only_after_complete_group_and_total_reconciliation",
+          "note": "会计贡献分解，不是因果效应。覆盖已加载历史快照；单侧缺组在完整分组与总额核对后按0计，不代表真实世界无业务。贡献率=分组变化/总变化，可为负或超过100%；总变化为0时不计算。按绝对变化排序，未展示分组归入其余。",
+          "status": "complete"
+        }
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "decomposition-09",
+      "family": "factors",
+      "split": "development",
+      "question": "2011年第一季度相比2010年第一季度，将销售额变化分解为订单数和平均订单金额各自的贡献",
+      "passed": true,
+      "elapsed_seconds": 6.822,
+      "http_status": 200,
+      "request_id": "c19a4b3dd85e41bd851ef3ee27dc7139",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "factor": "订单数",
+            "difference": "-180875.67401946470259111342632787328046921726379965",
+            "contribution_percent": "169.07024444934496527710972620114020685298550747851"
+          },
+          {
+            "factor": "平均订单金额",
+            "difference": "73893.11501946470259111342632787328046921726379964",
+            "contribution_percent": "-69.070244449344965277109726201140206852985507478504"
+          }
+        ],
+        "comparison_data": [
+          {
+            "SALES_AMOUNT": "2039618.369000",
+            "ORDER_COUNT": 3987
+          }
+        ],
+        "analysis": null,
+        "evidence": {
+          "mode": "llm_rag",
+          "query_plan": {
+            "analysis": "volume_value",
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "in",
+                "value": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            ],
+            "comparison_filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "in",
+                "value": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            ],
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "analysis_version": "accounting_decomposition_v1",
+          "analysis_queries": [
+            {
+              "name": "current_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month IN (:p1_0, :p1_1, :p1_2) HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": 2011,
+                "p1_0": 1,
+                "p1_1": 2,
+                "p1_2": 3
+              }
+            },
+            {
+              "name": "previous_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month IN (:p1_0, :p1_1, :p1_2) HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": 2010,
+                "p1_0": 1,
+                "p1_1": 2,
+                "p1_2": 3
+              }
+            }
+          ],
+          "snapshot": "repeatable_read_read_only",
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "dataset_notice": "仅覆盖已加载历史快照；首尾年份可能不完整，不代表政策因果。",
+          "possibly_truncated": false
+        },
+        "execution_ms": 792.09,
+        "summary": "销售额变化已按订单数与平均订单金额对称分解；客单价变化不是纯价格效应，也不是政策因果效应。",
+        "decomposition": {
+          "kind": "volume_value",
+          "current": "1932635.810000",
+          "previous": "2039618.369000",
+          "difference": "-106982.559000",
+          "current_orders": "3640",
+          "previous_orders": "3987",
+          "current_aov": "530.94390384615384615384615384615384615384615384615",
+          "previous_aov": "511.56718560321043391020817657386506144971156257838",
+          "order_count_effect": "-180875.67401946470259111342632787328046921726379965",
+          "average_order_value_effect": "73893.11501946470259111342632787328046921726379964",
+          "order_count_contribution_percent": "169.07024444934496527710972620114020685298550747851",
+          "aov_contribution_percent": "-69.070244449344965277109726201140206852985507478504",
+          "reconciliation_residual": "1E-44",
+          "causal": false,
+          "formula": "数量贡献=(N1-N0)*(A1+A0)/2；均额贡献=(A1-A0)*(N1+N0)/2；A=销售额/去重订单数",
+          "note": "两种替换顺序取平均，使用未四舍五入的总额/订单数，两个贡献相加还原销售额变化。客单价包含组合变化，不等于商品定价效应，更不是政策因果效应。",
+          "status": "complete"
+        }
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "decomposition-10",
+      "family": "factors",
+      "split": "test",
+      "question": "2011年6月相比2010年6月，将销售额变化分解为订单数和平均订单金额各自的贡献",
+      "passed": true,
+      "elapsed_seconds": 6.705,
+      "http_status": 200,
+      "request_id": "be8ab663abd94ad6a770557ad1e995e2",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "factor": "订单数",
+            "difference": "-53435.31132381229962110171961527251530166132322938",
+            "contribution_percent": "-564.27313177749277300693702496443959827557745105874"
+          },
+          {
+            "factor": "平均订单金额",
+            "difference": "62905.07132381229962110171961527251530166132322939",
+            "contribution_percent": "664.27313177749277300693702496443959827557745105884"
+          }
+        ],
+        "comparison_data": [
+          {
+            "SALES_AMOUNT": "752270.140000",
+            "ORDER_COUNT": 1645
+          }
+        ],
+        "analysis": null,
+        "evidence": {
+          "mode": "llm_rag",
+          "query_plan": {
+            "analysis": "volume_value",
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 6
+              }
+            ],
+            "comparison_filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 6
+              }
+            ],
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "analysis_version": "accounting_decomposition_v1",
+          "analysis_queries": [
+            {
+              "name": "current_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": 2011,
+                "p1": 6
+              }
+            },
+            {
+              "name": "previous_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": 2010,
+                "p1": 6
+              }
+            }
+          ],
+          "snapshot": "repeatable_read_read_only",
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "dataset_notice": "仅覆盖已加载历史快照；首尾年份可能不完整，不代表政策因果。",
+          "possibly_truncated": false
+        },
+        "execution_ms": 525.94,
+        "summary": "销售额变化已按订单数与平均订单金额对称分解；客单价变化不是纯价格效应，也不是政策因果效应。",
+        "decomposition": {
+          "kind": "volume_value",
+          "current": "761739.900000",
+          "previous": "752270.140000",
+          "difference": "9469.760000",
+          "current_orders": "1533",
+          "previous_orders": "1645",
+          "current_aov": "496.89491193737769080234833659491193737769080234834",
+          "previous_aov": "457.30707598784194528875379939209726443768996960486",
+          "order_count_effect": "-53435.31132381229962110171961527251530166132322938",
+          "average_order_value_effect": "62905.07132381229962110171961527251530166132322939",
+          "order_count_contribution_percent": "-564.27313177749277300693702496443959827557745105874",
+          "aov_contribution_percent": "664.27313177749277300693702496443959827557745105884",
+          "reconciliation_residual": "-1E-44",
+          "causal": false,
+          "formula": "数量贡献=(N1-N0)*(A1+A0)/2；均额贡献=(A1-A0)*(N1+N0)/2；A=销售额/去重订单数",
+          "note": "两种替换顺序取平均，使用未四舍五入的总额/订单数，两个贡献相加还原销售额变化。客单价包含组合变化，不等于商品定价效应，更不是政策因果效应。",
+          "status": "complete"
+        }
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "decomposition-11",
+      "family": "factors",
+      "split": "test",
+      "question": "2011年9月相比2011年8月，将销售额变化分解为订单数和平均订单金额各自的贡献",
+      "passed": true,
+      "elapsed_seconds": 5.948,
+      "http_status": 200,
+      "request_id": "52dba303e8a444b79248c78143ccdd00",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "factor": "订单数",
+            "difference": "269901.55654231954233274150383355925247894432229656",
+            "contribution_percent": "90.131888922648204533950995301961409694600966788190"
+          },
+          {
+            "factor": "平均订单金额",
+            "difference": "29550.235457680457667258496166440747521055677703429",
+            "contribution_percent": "9.8681110773517954660490046980385903053990332118063"
+          }
+        ],
+        "comparison_data": [
+          {
+            "SALES_AMOUNT": "759138.380000",
+            "ORDER_COUNT": 1361
+          }
+        ],
+        "analysis": null,
+        "evidence": {
+          "mode": "llm_rag",
+          "query_plan": {
+            "analysis": "volume_value",
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 9
+              }
+            ],
+            "comparison_filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 8
+              }
+            ],
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "analysis_version": "accounting_decomposition_v1",
+          "analysis_queries": [
+            {
+              "name": "current_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": 2011,
+                "p1": 9
+              }
+            },
+            {
+              "name": "previous_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": 2011,
+                "p1": 8
+              }
+            }
+          ],
+          "snapshot": "repeatable_read_read_only",
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "dataset_notice": "仅覆盖已加载历史快照；首尾年份可能不完整，不代表政策因果。",
+          "possibly_truncated": false
+        },
+        "execution_ms": 621.13,
+        "summary": "销售额变化已按订单数与平均订单金额对称分解；客单价变化不是纯价格效应，也不是政策因果效应。",
+        "decomposition": {
+          "kind": "volume_value",
+          "current": "1058590.172000",
+          "previous": "759138.380000",
+          "difference": "299451.792000",
+          "current_orders": "1837",
+          "previous_orders": "1361",
+          "current_aov": "576.26030048992923244420250408274360370168753402286",
+          "previous_aov": "557.77985304922850844966936076414401175606171932403",
+          "order_count_effect": "269901.55654231954233274150383355925247894432229656",
+          "average_order_value_effect": "29550.235457680457667258496166440747521055677703429",
+          "order_count_contribution_percent": "90.131888922648204533950995301961409694600966788190",
+          "aov_contribution_percent": "9.8681110773517954660490046980385903053990332118063",
+          "reconciliation_residual": "1.1E-44",
+          "causal": false,
+          "formula": "数量贡献=(N1-N0)*(A1+A0)/2；均额贡献=(A1-A0)*(N1+N0)/2；A=销售额/去重订单数",
+          "note": "两种替换顺序取平均，使用未四舍五入的总额/订单数，两个贡献相加还原销售额变化。客单价包含组合变化，不等于商品定价效应，更不是政策因果效应。",
+          "status": "complete"
+        }
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "decomposition-12",
+      "family": "factors",
+      "split": "test",
+      "question": "2011年11月相比2010年11月，将销售额变化分解为订单数和平均订单金额各自的贡献",
+      "passed": true,
+      "elapsed_seconds": 6.584,
+      "http_status": 200,
+      "request_id": "20eb13a0a9c542d2a72c3e6e41356c32",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "factor": "订单数",
+            "difference": "11884.067248364051370660373054790524296310377925662",
+            "contribution_percent": "30.298065728696611741561850471148379670220978639480"
+          },
+          {
+            "factor": "平均订单金额",
+            "difference": "27339.780751635948629339626945209475703689622074318",
+            "contribution_percent": "69.701934271303388258438149528851620329779021360469"
+          }
+        ],
+        "comparison_data": [
+          {
+            "SALES_AMOUNT": "1470272.482000",
+            "ORDER_COUNT": 2747
+          }
+        ],
+        "analysis": null,
+        "evidence": {
+          "mode": "llm_rag",
+          "query_plan": {
+            "analysis": "volume_value",
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year_month",
+                "op": "eq",
+                "value": "2011-11"
+              }
+            ],
+            "comparison_filters": [
+              {
+                "field": "dim_date.year_month",
+                "op": "eq",
+                "value": "2010-11"
+              }
+            ],
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "analysis_version": "accounting_decomposition_v1",
+          "analysis_queries": [
+            {
+              "name": "current_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year_month = :p0 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": "2011-11"
+              }
+            },
+            {
+              "name": "previous_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year_month = :p0 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": "2010-11"
+              }
+            }
+          ],
+          "snapshot": "repeatable_read_read_only",
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "dataset_notice": "仅覆盖已加载历史快照；首尾年份可能不完整，不代表政策因果。",
+          "possibly_truncated": false
+        },
+        "execution_ms": 818.93,
+        "summary": "销售额变化已按订单数与平均订单金额对称分解；客单价变化不是纯价格效应，也不是政策因果效应。",
+        "decomposition": {
+          "kind": "volume_value",
+          "current": "1509496.330000",
+          "previous": "1470272.482000",
+          "difference": "39223.848000",
+          "current_orders": "2769",
+          "previous_orders": "2747",
+          "current_aov": "545.14132538822679667750090285301552907186710003611",
+          "previous_aov": "535.22842446305060065526028394612304331998543866036",
+          "order_count_effect": "11884.067248364051370660373054790524296310377925662",
+          "average_order_value_effect": "27339.780751635948629339626945209475703689622074318",
+          "order_count_contribution_percent": "30.298065728696611741561850471148379670220978639480",
+          "aov_contribution_percent": "69.701934271303388258438149528851620329779021360469",
+          "reconciliation_residual": "2.0E-44",
+          "causal": false,
+          "formula": "数量贡献=(N1-N0)*(A1+A0)/2；均额贡献=(A1-A0)*(N1+N0)/2；A=销售额/去重订单数",
+          "note": "两种替换顺序取平均，使用未四舍五入的总额/订单数，两个贡献相加还原销售额变化。客单价包含组合变化，不等于商品定价效应，更不是政策因果效应。",
+          "status": "complete"
+        }
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "decomposition-13",
+      "family": "factors",
+      "split": "development",
+      "question": "法国2011年第一季度相比2010年第一季度，将销售额变化分解为订单数和平均订单金额各自的贡献",
+      "passed": true,
+      "elapsed_seconds": 6.036,
+      "http_status": 200,
+      "request_id": "95015e26603847e5b3a720a73de41f32",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "factor": "订单数",
+            "difference": "16884.919333333333333333333333333333333333333333334",
+            "contribution_percent": "114.87707266738103742509028852641187442949557487003"
+          },
+          {
+            "factor": "平均订单金额",
+            "difference": "-2186.6693333333333333333333333333333333333333333334",
+            "contribution_percent": "-14.877072667381037425090288526411874429495574870025"
+          }
+        ],
+        "comparison_data": [
+          {
+            "SALES_AMOUNT": "26147.380000",
+            "ORDER_COUNT": 45
+          }
+        ],
+        "analysis": null,
+        "evidence": {
+          "mode": "llm_rag",
+          "query_plan": {
+            "analysis": "volume_value",
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_country.country",
+                "op": "eq",
+                "value": "France"
+              },
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.year_month",
+                "op": "in",
+                "value": [
+                  "2011-01",
+                  "2011-02",
+                  "2011-03"
+                ]
+              }
+            ],
+            "comparison_filters": [
+              {
+                "field": "dim_country.country",
+                "op": "eq",
+                "value": "France"
+              },
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.year_month",
+                "op": "in",
+                "value": [
+                  "2010-01",
+                  "2010-02",
+                  "2010-03"
+                ]
+              }
+            ],
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "analysis_version": "accounting_decomposition_v1",
+          "analysis_queries": [
+            {
+              "name": "current_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_country ON fact_retail_line.country = dim_country.country WHERE dim_country.country = :p0 AND dim_date.year = :p1 AND dim_date.year_month IN (:p2_0, :p2_1, :p2_2) HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": "France",
+                "p1": 2011,
+                "p2_0": "2011-01",
+                "p2_1": "2011-02",
+                "p2_2": "2011-03"
+              }
+            },
+            {
+              "name": "previous_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_country ON fact_retail_line.country = dim_country.country WHERE dim_country.country = :p0 AND dim_date.year = :p1 AND dim_date.year_month IN (:p2_0, :p2_1, :p2_2) HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": "France",
+                "p1": 2010,
+                "p2_0": "2010-01",
+                "p2_1": "2010-02",
+                "p2_2": "2010-03"
+              }
+            }
+          ],
+          "snapshot": "repeatable_read_read_only",
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "dataset_notice": "仅覆盖已加载历史快照；首尾年份可能不完整，不代表政策因果。",
+          "possibly_truncated": false
+        },
+        "execution_ms": 50.1,
+        "summary": "销售额变化已按订单数与平均订单金额对称分解；客单价变化不是纯价格效应，也不是政策因果效应。",
+        "decomposition": {
+          "kind": "volume_value",
+          "current": "40845.630000",
+          "previous": "26147.380000",
+          "difference": "14698.250000",
+          "current_orders": "75",
+          "previous_orders": "45",
+          "current_aov": "544.608400",
+          "previous_aov": "581.05288888888888888888888888888888888888888888889",
+          "order_count_effect": "16884.919333333333333333333333333333333333333333334",
+          "average_order_value_effect": "-2186.6693333333333333333333333333333333333333333334",
+          "order_count_contribution_percent": "114.87707266738103742509028852641187442949557487003",
+          "aov_contribution_percent": "-14.877072667381037425090288526411874429495574870025",
+          "reconciliation_residual": "-6E-46",
+          "causal": false,
+          "formula": "数量贡献=(N1-N0)*(A1+A0)/2；均额贡献=(A1-A0)*(N1+N0)/2；A=销售额/去重订单数",
+          "note": "两种替换顺序取平均，使用未四舍五入的总额/订单数，两个贡献相加还原销售额变化。客单价包含组合变化，不等于商品定价效应，更不是政策因果效应。",
+          "status": "complete"
+        }
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "decomposition-14",
+      "family": "factors",
+      "split": "test",
+      "question": "法国2011年6月相比2010年6月，将销售额变化分解为订单数和平均订单金额各自的贡献",
+      "passed": true,
+      "elapsed_seconds": 6.423,
+      "http_status": 200,
+      "request_id": "b3e425b657e7446a8dc58a0a316f41e2",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "factor": "订单数",
+            "difference": "3704.6966058906030855539971949509116409537166900421",
+            "contribution_percent": "51.627142156847923465085030734265136366095214796841"
+          },
+          {
+            "factor": "平均订单金额",
+            "difference": "3471.1733941093969144460028050490883590462833099580",
+            "contribution_percent": "48.372857843152076534914969265734863633904785203160"
+          }
+        ],
+        "comparison_data": [
+          {
+            "SALES_AMOUNT": "9172.540000",
+            "ORDER_COUNT": 23
+          }
+        ],
+        "analysis": null,
+        "evidence": {
+          "mode": "llm_rag",
+          "query_plan": {
+            "analysis": "volume_value",
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_country.country",
+                "op": "eq",
+                "value": "France"
+              },
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 6
+              }
+            ],
+            "comparison_filters": [
+              {
+                "field": "dim_country.country",
+                "op": "eq",
+                "value": "France"
+              },
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 6
+              }
+            ],
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "analysis_version": "accounting_decomposition_v1",
+          "analysis_queries": [
+            {
+              "name": "current_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_country ON fact_retail_line.country = dim_country.country WHERE dim_country.country = :p0 AND dim_date.year = :p1 AND dim_date.month = :p2 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": "France",
+                "p1": 2011,
+                "p2": 6
+              }
+            },
+            {
+              "name": "previous_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_country ON fact_retail_line.country = dim_country.country WHERE dim_country.country = :p0 AND dim_date.year = :p1 AND dim_date.month = :p2 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": "France",
+                "p1": 2010,
+                "p2": 6
+              }
+            }
+          ],
+          "snapshot": "repeatable_read_read_only",
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "dataset_notice": "仅覆盖已加载历史快照；首尾年份可能不完整，不代表政策因果。",
+          "possibly_truncated": false
+        },
+        "execution_ms": 57.54,
+        "summary": "销售额变化已按订单数与平均订单金额对称分解；客单价变化不是纯价格效应，也不是政策因果效应。",
+        "decomposition": {
+          "kind": "volume_value",
+          "current": "16348.410000",
+          "previous": "9172.540000",
+          "difference": "7175.870000",
+          "current_orders": "31",
+          "previous_orders": "23",
+          "current_aov": "527.36806451612903225806451612903225806451612903226",
+          "previous_aov": "398.80608695652173913043478260869565217391304347826",
+          "order_count_effect": "3704.6966058906030855539971949509116409537166900421",
+          "average_order_value_effect": "3471.1733941093969144460028050490883590462833099580",
+          "order_count_contribution_percent": "51.627142156847923465085030734265136366095214796841",
+          "aov_contribution_percent": "48.372857843152076534914969265734863633904785203160",
+          "reconciliation_residual": "-1E-46",
+          "causal": false,
+          "formula": "数量贡献=(N1-N0)*(A1+A0)/2；均额贡献=(A1-A0)*(N1+N0)/2；A=销售额/去重订单数",
+          "note": "两种替换顺序取平均，使用未四舍五入的总额/订单数，两个贡献相加还原销售额变化。客单价包含组合变化，不等于商品定价效应，更不是政策因果效应。",
+          "status": "complete"
+        }
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "decomposition-15",
+      "family": "factors",
+      "split": "test",
+      "question": "法国2011年9月相比2011年8月，将销售额变化分解为订单数和平均订单金额各自的贡献",
+      "passed": true,
+      "elapsed_seconds": 6.424,
+      "http_status": 200,
+      "request_id": "3786ca88a53442f5a4fb5d845e53d4bb",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "factor": "订单数",
+            "difference": "8617.9093015873015873015873015873015873015873015875",
+            "contribution_percent": "89.610456620796557658890092435409725065213009578661"
+          },
+          {
+            "factor": "平均订单金额",
+            "difference": "999.1706984126984126984126984126984126984126984127",
+            "contribution_percent": "10.389543379203442341109907564590274934786990421341"
+          }
+        ],
+        "comparison_data": [
+          {
+            "SALES_AMOUNT": "13810.960000",
+            "ORDER_COUNT": 28
+          }
+        ],
+        "analysis": null,
+        "evidence": {
+          "mode": "llm_rag",
+          "query_plan": {
+            "analysis": "volume_value",
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_country.country",
+                "op": "eq",
+                "value": "France"
+              },
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 9
+              }
+            ],
+            "comparison_filters": [
+              {
+                "field": "dim_country.country",
+                "op": "eq",
+                "value": "France"
+              },
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 8
+              }
+            ],
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "analysis_version": "accounting_decomposition_v1",
+          "analysis_queries": [
+            {
+              "name": "current_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_country ON fact_retail_line.country = dim_country.country WHERE dim_country.country = :p0 AND dim_date.year = :p1 AND dim_date.month = :p2 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": "France",
+                "p1": 2011,
+                "p2": 9
+              }
+            },
+            {
+              "name": "previous_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_country ON fact_retail_line.country = dim_country.country WHERE dim_country.country = :p0 AND dim_date.year = :p1 AND dim_date.month = :p2 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": "France",
+                "p1": 2011,
+                "p2": 8
+              }
+            }
+          ],
+          "snapshot": "repeatable_read_read_only",
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "dataset_notice": "仅覆盖已加载历史快照；首尾年份可能不完整，不代表政策因果。",
+          "possibly_truncated": false
+        },
+        "execution_ms": 62.23,
+        "summary": "销售额变化已按订单数与平均订单金额对称分解；客单价变化不是纯价格效应，也不是政策因果效应。",
+        "decomposition": {
+          "kind": "volume_value",
+          "current": "23428.040000",
+          "previous": "13810.960000",
+          "difference": "9617.080000",
+          "current_orders": "45",
+          "previous_orders": "28",
+          "current_aov": "520.62311111111111111111111111111111111111111111111",
+          "previous_aov": "493.24857142857142857142857142857142857142857142857",
+          "order_count_effect": "8617.9093015873015873015873015873015873015873015875",
+          "average_order_value_effect": "999.1706984126984126984126984126984126984126984127",
+          "order_count_contribution_percent": "89.610456620796557658890092435409725065213009578661",
+          "aov_contribution_percent": "10.389543379203442341109907564590274934786990421341",
+          "reconciliation_residual": "-2E-46",
+          "causal": false,
+          "formula": "数量贡献=(N1-N0)*(A1+A0)/2；均额贡献=(A1-A0)*(N1+N0)/2；A=销售额/去重订单数",
+          "note": "两种替换顺序取平均，使用未四舍五入的总额/订单数，两个贡献相加还原销售额变化。客单价包含组合变化，不等于商品定价效应，更不是政策因果效应。",
+          "status": "complete"
+        }
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "decomposition-16",
+      "family": "factors",
+      "split": "test",
+      "question": "法国2011年11月相比2010年11月，将销售额变化分解为订单数和平均订单金额各自的贡献",
+      "passed": true,
+      "elapsed_seconds": 6.388,
+      "http_status": 200,
+      "request_id": "ce11ee254773443da6cacf4ae0828346",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "factor": "订单数",
+            "difference": "11840.23912500",
+            "contribution_percent": "97.527265280335803315201096500621064804899987150383"
+          },
+          {
+            "factor": "平均订单金额",
+            "difference": "300.20087500",
+            "contribution_percent": "2.4727347196641966847989034993789351951000128496167"
+          }
+        ],
+        "comparison_data": [
+          {
+            "SALES_AMOUNT": "19618.270000",
+            "ORDER_COUNT": 40
+          }
+        ],
+        "analysis": null,
+        "evidence": {
+          "mode": "llm_rag",
+          "query_plan": {
+            "analysis": "volume_value",
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_country.country",
+                "op": "eq",
+                "value": "France"
+              },
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 11
+              }
+            ],
+            "comparison_filters": [
+              {
+                "field": "dim_country.country",
+                "op": "eq",
+                "value": "France"
+              },
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 11
+              }
+            ],
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "analysis_version": "accounting_decomposition_v1",
+          "analysis_queries": [
+            {
+              "name": "current_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_country ON fact_retail_line.country = dim_country.country WHERE dim_country.country = :p0 AND dim_date.year = :p1 AND dim_date.month = :p2 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": "France",
+                "p1": 2011,
+                "p2": 11
+              }
+            },
+            {
+              "name": "previous_total",
+              "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_country ON fact_retail_line.country = dim_country.country WHERE dim_country.country = :p0 AND dim_date.year = :p1 AND dim_date.month = :p2 HAVING COUNT(*) > 0 LIMIT 1",
+              "params": {
+                "p0": "France",
+                "p1": 2010,
+                "p2": 11
+              }
+            }
+          ],
+          "snapshot": "repeatable_read_read_only",
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "dataset_notice": "仅覆盖已加载历史快照；首尾年份可能不完整，不代表政策因果。",
+          "possibly_truncated": false
+        },
+        "execution_ms": 129.78,
+        "summary": "销售额变化已按订单数与平均订单金额对称分解；客单价变化不是纯价格效应，也不是政策因果效应。",
+        "decomposition": {
+          "kind": "volume_value",
+          "current": "31758.710000",
+          "previous": "19618.270000",
+          "difference": "12140.440000",
+          "current_orders": "64",
+          "previous_orders": "40",
+          "current_aov": "496.22984375",
+          "previous_aov": "490.456750",
+          "order_count_effect": "11840.23912500",
+          "average_order_value_effect": "300.20087500",
+          "order_count_contribution_percent": "97.527265280335803315201096500621064804899987150383",
+          "aov_contribution_percent": "2.4727347196641966847989034993789351951000128496167",
+          "reconciliation_residual": "0E-8",
+          "causal": false,
+          "formula": "数量贡献=(N1-N0)*(A1+A0)/2；均额贡献=(A1-A0)*(N1+N0)/2；A=销售额/去重订单数",
+          "note": "两种替换顺序取平均，使用未四舍五入的总额/订单数，两个贡献相加还原销售额变化。客单价包含组合变化，不等于商品定价效应，更不是政策因果效应。",
+          "status": "complete"
+        }
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "decomposition-17",
+      "family": "missing_period",
+      "split": "development",
+      "question": "将2011年6月相比2025年6月的销售额变化按国家做贡献分解；没有整期数据就明确说明，不把缺期算作零",
+      "passed": false,
+      "elapsed_seconds": 5.214,
+      "http_status": 200,
+      "request_id": "2074d4847a92492bb42bd15972e8c817",
+      "terminal": {
+        "type": "clarification",
+        "message": "数据集仅覆盖2009-12-01至2011-12-09，没有2025年6月的数据，无法计算2011年6月相比2025年6月的销售额变化。请确认是否改为可比较的月份（如2011年6月相比2010年6月）？"
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "clarification"
+      ]
+    },
+    {
+      "id": "decomposition-18",
+      "family": "nonadditive",
+      "split": "test",
+      "question": "2011年6月比2010年6月，各商品的去重客户数增长贡献相加是多少？请直接相加计算总体增长",
+      "passed": true,
+      "elapsed_seconds": 6.118,
+      "http_status": 200,
+      "request_id": "c47507fdb3c944879afd4a0a8d08bad9",
+      "terminal": {
+        "type": "clarification",
+        "message": "去重客户数（ACTIVE_CUSTOMERS）是去重计数指标，各商品的去重客户数不能直接相加得到总体增长，且当前未配置按商品分解去重客户数变化的贡献算法。请确认：您是要按商品查看2011年6月与2010年6月各自的去重客户数（不做相加），还是改用可加总的销售额/销量做贡献分解？"
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "clarification"
+      ]
+    },
+    {
+      "id": "decomposition-19",
+      "family": "causal_boundary",
+      "split": "test",
+      "question": "根据2011年6月对2010年6月的订单变化，计算培训政策造成的因果销售增量",
+      "passed": true,
+      "elapsed_seconds": 6.151,
+      "http_status": 200,
+      "request_id": "f9620980501e4f2882c9ecc894669eca",
+      "terminal": {
+        "type": "clarification",
+        "message": "该数据集仅支持描述性统计，无法计算培训政策造成的因果销售增量；请改为查询2011年6月相对2010年6月的订单数变化，或说明其他可统计的比较口径。"
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "clarification"
+      ]
+    },
+    {
+      "id": "decomposition-20",
+      "family": "country_regression",
+      "split": "development",
+      "question": "按年月列出2010年法国每个月的销售额",
+      "passed": true,
+      "elapsed_seconds": 4.665,
+      "http_status": 200,
+      "request_id": "f9eb6507bfee430faa21b35761532d5b",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "SALES_AMOUNT": "8465.630000",
+            "dim_date__year_month": "2010-01"
+          },
+          {
+            "SALES_AMOUNT": "9024.160000",
+            "dim_date__year_month": "2010-02"
+          },
+          {
+            "SALES_AMOUNT": "8657.590000",
+            "dim_date__year_month": "2010-03"
+          },
+          {
+            "SALES_AMOUNT": "7642.980000",
+            "dim_date__year_month": "2010-04"
+          },
+          {
+            "SALES_AMOUNT": "13958.150000",
+            "dim_date__year_month": "2010-05"
+          },
+          {
+            "SALES_AMOUNT": "9172.540000",
+            "dim_date__year_month": "2010-06"
+          },
+          {
+            "SALES_AMOUNT": "11546.640000",
+            "dim_date__year_month": "2010-07"
+          },
+          {
+            "SALES_AMOUNT": "16570.320000",
+            "dim_date__year_month": "2010-08"
+          },
+          {
+            "SALES_AMOUNT": "14531.330000",
+            "dim_date__year_month": "2010-09"
+          },
+          {
+            "SALES_AMOUNT": "15211.770000",
+            "dim_date__year_month": "2010-10"
+          },
+          {
+            "SALES_AMOUNT": "19618.270000",
+            "dim_date__year_month": "2010-11"
+          },
+          {
+            "SALES_AMOUNT": "15906.730000",
+            "dim_date__year_month": "2010-12"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 12 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, dim_date.year_month AS dim_date__year_month, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_country ON fact_retail_line.country = dim_country.country WHERE dim_date.year = :p0 AND dim_country.country = :p1 GROUP BY dim_date.year_month HAVING COUNT(*) > 0 ORDER BY dim_date__year_month ASC LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": "France"
+          },
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [
+              "dim_date.year_month"
+            ],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_country.country",
+                "op": "eq",
+                "value": "France"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": "dim_date.year_month",
+            "descending": false,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 70.5
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    }
+  ],
+  "passed": 19,
+  "completed": 20,
+  "finished_at_utc": "2026-09-29T09:42:49.057051+00:00",
+  "application_unchanged_during_run": true
+}

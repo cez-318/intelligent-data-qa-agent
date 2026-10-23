@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "items": [{
+    "id": "decomposition-verification",
+    "title": "原项目贡献分解：验证结果与限制",
+    "queries": [
+      {
+        "id": "software-regression",
+        "source": {"label": "pytest.txt / coverage.json", "caveats": ["软件回归使用受控模型和部分服务适配器，不能代替在线问数准确率。覆盖率仅针对选定主流程与安全模块。"]},
+        "summary": "当前发布包软件回归249项全部通过；所选模块语句覆盖1306/1410，约92.62%。",
+        "rows": [{"passed":249,"failed":0,"coverage_percent":92.62}],
+        "columns": [{"field":"passed","label":"通过项数"},{"field":"failed","label":"失败项数"},{"field":"coverage_percent","label":"所选模块语句覆盖率（%）"}]
+      },
+      {
+        "id": "independent-reconciliation",
+        "source": {"label":"decomposition_direct.json / decomposition_audit.ipynb", "links":[{"label":"UCI Online Retail II","url":"https://archive.ics.uci.edu/dataset/502/online+retail+ii"}], "caveats":["受控结构化计划验证SQL和数值计算，不验证自然语言理解。真实零售数据不能代替人力政策的因果证据。"]},
+        "summary":"基于1,067,371行公开历史记录，真实MySQL受控计划17/17通过；Notebook重新执行独立原始行SQL，16个双期有效案例全部守恒，另一个受控案例验证缺期行为。",
+        "rows":[{"kind":"真实MySQL受控计划","passed":17,"total":17},{"kind":"Notebook双期数值重算","passed":16,"total":16}],
+        "columns":[{"field":"kind","label":"检查类型"},{"field":"passed","label":"通过"},{"field":"total","label":"总数"}],
+        "methods":[{"language":"calculation","code":"分组贡献 = 本期分组金额 − 基期分组金额；全部分组贡献之和 = 总金额变化。\n订单数贡献 = (N1 − N0) × (A1 + A0) / 2；客单价贡献 = (A1 − A0) × (N1 + N0) / 2。\nA = 销售额 / 去重有效订单数；使用未舍入值；任一期有效订单数为0则不计算两因素分解。"}]
+      },
+      {
+        "id":"live-runs",
+        "source":{"label":"decomposition_live_all_20260929_174138.json 与历史逐轮记录", "caveats":["历史首轮留出实例的8次检索阶段故障根因不能仅凭后续未复现认定已消除。","20个定向案例共享问题模板，不应表述为生产或通用准确率。","缺期题被模型安全澄清，但与预定结构化unavailable返回格式不符，严格计失败。"]},
+        "rows":[{"run":"历史开发首轮","passed":5,"total":6},{"run":"历史留出首轮","passed":6,"total":14},{"run":"历史同集复测","passed":14,"total":14},{"run":"当前完整冻结集","passed":19,"total":20}],
+        "columns":[{"field":"run","label":"评测轮次"},{"field":"passed","label":"通过"},{"field":"total","label":"总数"}],
+        "methods":[{"language":"calculation","code":"每轮通过数 = 该轮冻结案例中 passed=true 的条目数。数值误差容限0.000001；同时检查完整分组数、主要贡献、其余贡献与非因果标记。所有轮次保留，不用复测覆盖首轮。"}]
+      }
+    ]
+  }]
+}

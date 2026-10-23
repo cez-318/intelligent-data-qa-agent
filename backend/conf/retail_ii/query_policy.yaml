@@ -1,0 +1,7 @@
+max_rows: 200
+timeout_ms: 10000
+tables:
+  fact_retail_line: [line_id, invoice_no, stock_code, customer_id, date_id, country, quantity, unit_price, signed_amount, sale_amount, sale_units, sale_invoice, sale_customer, cancel_amount, cancel_invoice]
+  dim_date: [date_id, year, month, day, year_month]
+  dim_country: [country]
+  dim_product: [stock_code, product_name]

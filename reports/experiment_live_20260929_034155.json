@@ -1,0 +1,266 @@
+{
+  "executed_at_utc": "2026-09-29T03:41:55.294493+00:00",
+  "live_http": true,
+  "request_id": "3e721b2cd86741e39cbdb8b96cfcf9de",
+  "elapsed_seconds": 1.422,
+  "result": {
+    "status": "complete",
+    "method": "ITT risk difference; Wilson/Newcombe; Bonferroni",
+    "causal_scope": "conditional_on_documented_random_assignment_and_valid_followup",
+    "family_confidence": 0.95,
+    "interval_level": 0.9875,
+    "comparison_count": 4,
+    "effects": [
+      {
+        "treatment": "Mens E-Mail",
+        "control": "No E-Mail",
+        "outcome": "conversion",
+        "outcome_label": "两周购买率",
+        "treatment_n": 21307,
+        "control_n": 21306,
+        "treatment_events": 267,
+        "control_events": 122,
+        "treatment_rate": 0.01253109306800582,
+        "control_rate": 0.005726086548390125,
+        "risk_difference": 0.006805006519615695,
+        "effect_percentage_points": 0.6805006519615695,
+        "ci_low": 0.004524134648381986,
+        "ci_high": 0.009158692030364296,
+        "ci_low_percentage_points": 0.4524134648381986,
+        "ci_high_percentage_points": 0.9158692030364296,
+        "relative_lift_percent": 118.84218762863279,
+        "incremental_events_per_1000": 6.805006519615695,
+        "direction": "positive"
+      },
+      {
+        "treatment": "Mens E-Mail",
+        "control": "No E-Mail",
+        "outcome": "visit",
+        "outcome_label": "两周访问率",
+        "treatment_n": 21307,
+        "control_n": 21306,
+        "treatment_events": 3894,
+        "control_events": 2262,
+        "treatment_rate": 0.18275684047496127,
+        "control_rate": 0.10616727682343002,
+        "risk_difference": 0.07658956365153125,
+        "effect_percentage_points": 7.6589563651531245,
+        "ci_low": 0.06813220292936134,
+        "ci_high": 0.08504841374693664,
+        "ci_low_percentage_points": 6.813220292936134,
+        "ci_high_percentage_points": 8.504841374693664,
+        "relative_lift_percent": 72.1404616781399,
+        "incremental_events_per_1000": 76.58956365153125,
+        "direction": "positive"
+      },
+      {
+        "treatment": "Womens E-Mail",
+        "control": "No E-Mail",
+        "outcome": "conversion",
+        "outcome_label": "两周购买率",
+        "treatment_n": 21387,
+        "control_n": 21306,
+        "treatment_events": 189,
+        "control_events": 122,
+        "treatment_rate": 0.008837144059475383,
+        "control_rate": 0.005726086548390125,
+        "risk_difference": 0.003111057511085258,
+        "effect_percentage_points": 0.3111057511085258,
+        "ci_low": 0.0010568095550654868,
+        "ci_high": 0.005205680089754385,
+        "ci_low_percentage_points": 0.10568095550654867,
+        "ci_high_percentage_points": 0.5205680089754385,
+        "relative_lift_percent": 54.33130436982172,
+        "incremental_events_per_1000": 3.111057511085258,
+        "direction": "positive"
+      },
+      {
+        "treatment": "Womens E-Mail",
+        "control": "No E-Mail",
+        "outcome": "visit",
+        "outcome_label": "两周访问率",
+        "treatment_n": 21387,
+        "control_n": 21306,
+        "treatment_events": 3238,
+        "control_events": 2262,
+        "treatment_rate": 0.151400383410483,
+        "control_rate": 0.10616727682343002,
+        "risk_difference": 0.045233106587052985,
+        "effect_percentage_points": 4.523310658705299,
+        "ci_low": 0.037154621555693004,
+        "ci_high": 0.053315198790702296,
+        "ci_low_percentage_points": 3.7154621555693006,
+        "ci_high_percentage_points": 5.33151987907023,
+        "relative_lift_percent": 42.60550702669102,
+        "incremental_events_per_1000": 45.23310658705299,
+        "direction": "positive"
+      }
+    ],
+    "diagnostics": {
+      "sample_ratio_chi2": 0.20253125000000002,
+      "sample_ratio_p": 0.9036929575604196,
+      "sample_ratio_threshold": 0.001,
+      "total_n": 64000,
+      "arms": {
+        "No E-Mail": {
+          "n": 21306,
+          "conversion": 122,
+          "visit": 2262
+        },
+        "Mens E-Mail": {
+          "n": 21307,
+          "conversion": 267,
+          "visit": 3894
+        },
+        "Womens E-Mail": {
+          "n": 21387,
+          "conversion": 189,
+          "visit": 3238
+        }
+      }
+    },
+    "interpretation": "按原始随机分配估计两周平均意向处理效应；区间包含0表示证据不足，不代表证明无效。",
+    "limitations": [
+      "随机化依据来自研究发布者说明，并未审计原始分配日志。",
+      "因果解读仍依赖分配有效、结果完整、无组间干扰及一致性；样本比例检验通过不能证明这些假设。",
+      "区间为固定终点近似区间，经预先固定的全部比较数校正；不适用于反复窥视、自动挑选子组或连续监控。",
+      "估计仅适用于本实验人群、干预和观察窗口，不能外推成人力政策效果。"
+    ],
+    "experiment_id": "hillstrom_email_2008",
+    "title": "Hillstrom 随机邮件实验 · 64,000 名客户",
+    "data_quality": {
+      "rows": 64000,
+      "missing_outcomes": 0,
+      "excluded_rows": 0,
+      "exact_duplicate_extra_rows": 6562,
+      "duplicate_policy": "保留全部原始行；无客户ID，相同行不能据此认定是同一客户，无法独立核验每人一行。",
+      "baseline_balance": [
+        {
+          "treatment": "Mens E-Mail",
+          "field": "recency",
+          "standardized_mean_difference": 0.006831532454259954,
+          "flag": false
+        },
+        {
+          "treatment": "Mens E-Mail",
+          "field": "history",
+          "standardized_mean_difference": 0.007612868321542611,
+          "flag": false
+        },
+        {
+          "treatment": "Mens E-Mail",
+          "field": "mens",
+          "standardized_mean_difference": -0.0045823256374879625,
+          "flag": false
+        },
+        {
+          "treatment": "Mens E-Mail",
+          "field": "womens",
+          "standardized_mean_difference": 0.007588929691887142,
+          "flag": false
+        },
+        {
+          "treatment": "Mens E-Mail",
+          "field": "newbie",
+          "standardized_mean_difference": -0.0008918953696535328,
+          "flag": false
+        },
+        {
+          "treatment": "Womens E-Mail",
+          "field": "recency",
+          "standardized_mean_difference": 0.005180013205688683,
+          "flag": false
+        },
+        {
+          "treatment": "Womens E-Mail",
+          "field": "history",
+          "standardized_mean_difference": 0.006510722458553891,
+          "flag": false
+        },
+        {
+          "treatment": "Womens E-Mail",
+          "field": "mens",
+          "standardized_mean_difference": -0.008630731202832915,
+          "flag": false
+        },
+        {
+          "treatment": "Womens E-Mail",
+          "field": "womens",
+          "standardized_mean_difference": 0.004946313992582152,
+          "flag": false
+        },
+        {
+          "treatment": "Womens E-Mail",
+          "field": "newbie",
+          "standardized_mean_difference": 0.0025567009140795606,
+          "flag": false
+        }
+      ],
+      "balance_note": "仅检查注册的数值型处理前变量，|SMD|>0.1提示检查；不是随机性或无混杂证明。"
+    },
+    "evidence": {
+      "source": "https://blog.minethatdata.com/2008/03/minethatdata-e-mail-analytics-and-data.html",
+      "data_sha256": "0e5893329d8b93cefecc571777672028290ab69865718020c78c7284f291aece",
+      "registry_sha256": "e0e2dba4f258aff483f4b816f3337d7fde8d24b85c479cb7c2d77977c4a5fd5c",
+      "window": "随机分配邮件方案后两周；2008年公开，原文件未给出逐日时间戳",
+      "population": "过去12个月内购买过的客户；分组是邮件内容，不是客户性别",
+      "provenance_note": "发布者公开HTTP下载，HTTPS证书校验失败，未关闭校验。哈希固定下载版本，不代表核实发布者签名。",
+      "model_generated_statistics": false,
+      "customer_identity_verified": false
+    }
+  },
+  "independent_verification": {
+    "source_sql": "SELECT segment, COUNT(*) AS n, SUM(conversion) AS conversions, SUM(visit) AS visits FROM read_csv_auto(?) GROUP BY segment ORDER BY segment",
+    "oracle_counts": {
+      "Mens E-Mail": {
+        "n": 21307,
+        "conversion": 267,
+        "visit": 3894
+      },
+      "No E-Mail": {
+        "n": 21306,
+        "conversion": 122,
+        "visit": 2262
+      },
+      "Womens E-Mail": {
+        "n": 21387,
+        "conversion": 189,
+        "visit": 3238
+      }
+    },
+    "effect_checks": [
+      {
+        "arm": "Mens E-Mail",
+        "outcome": "conversion",
+        "absolute_max_error": 0.0,
+        "passed": true
+      },
+      {
+        "arm": "Mens E-Mail",
+        "outcome": "visit",
+        "absolute_max_error": 0.0,
+        "passed": true
+      },
+      {
+        "arm": "Womens E-Mail",
+        "outcome": "conversion",
+        "absolute_max_error": 8.673617379884035e-19,
+        "passed": true
+      },
+      {
+        "arm": "Womens E-Mail",
+        "outcome": "visit",
+        "absolute_max_error": 0.0,
+        "passed": true
+      }
+    ],
+    "srm_check_passed": true,
+    "note": "Calculation consistency, not observed ground-truth causal accuracy."
+  },
+  "software_sha256": {
+    "backend/improved/experiments.py": "ddd157a5a0ba713bd0285f60bbfb076b91b9e7d2c7a2a210dc9ea502cdda97f9",
+    "backend/improved/experiment_registry.py": "7efa4268c0c21b9d32d5ee61a1c62997b9693ffed6d17eb981f9919204d0fae9",
+    "backend/conf/experiments.json": "e0e2dba4f258aff483f4b816f3337d7fde8d24b85c479cb7c2d77977c4a5fd5c",
+    "tools/verify_experiment.py": "a777f820b06171d71d8c8b710d90318312faccd1a4d4e58c27c5cfe9ed622f3d"
+  }
+}

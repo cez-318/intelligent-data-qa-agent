@@ -1,0 +1,4877 @@
+{
+  "started_at_utc": "2026-09-29T09:31:07.097715+00:00",
+  "benchmark_sha256": "8d05369cca9562fa07fa80edf4574e46ff5e9eb67e31219df1751e7a9552e79a",
+  "checker_sha256": "49d3e93f6dbc4649c9aa3df11629fd3b87d1b9d31254208f3b9f7342d8676a7f",
+  "application_sha256": "76e62b25f0f1ad9b5e513a1828a1ff2849bda75b930cc1eba9b672ac588ba1a4",
+  "evaluator_sha256": "49d3e93f6dbc4649c9aa3df11629fd3b87d1b9d31254208f3b9f7342d8676a7f",
+  "provider": "deepseek",
+  "model": "deepseek-flash",
+  "workers": 2,
+  "split": "development",
+  "rule_fallback": false,
+  "limitation": "200 templated Chinese question instances; 50 development and 150 held-out instances share template families. Agent-authored, not independent human blind evaluation; not general enterprise/HR accuracy.",
+  "cases": [
+    {
+      "id": "retail-002",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2010年1月的去重订单数是多少？",
+      "passed": true,
+      "elapsed_seconds": 4.328,
+      "http_status": 200,
+      "request_id": "df9585a16eeb419fbb11e5fddb53e6e6",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "ORDER_COUNT": 1105
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year_month = :p0 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": "2010-01"
+          },
+          "definitions": {
+            "ORDER_COUNT": "去重订单数=合格销售明细的不同发票号数量，不是明细条数；分组订单数不可直接相加。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "ORDER_COUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year_month",
+                "op": "eq",
+                "value": "2010-01"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 69.16
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-004",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2010年1月的销量是多少？",
+      "passed": true,
+      "elapsed_seconds": 4.217,
+      "http_status": 200,
+      "request_id": "192f46b3bc79406883e772ba30b6f170",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "UNITS": "391525"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_units) AS UNITS, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 1
+          },
+          "definitions": {
+            "UNITS": "销量=合格销售明细的数量之和，不包含取消单及非正数量或非正价格记录。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "UNITS"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 1
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 49.62
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-008",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2010年2月西班牙的平均订单金额是多少？",
+      "passed": true,
+      "elapsed_seconds": 4.336,
+      "http_status": 200,
+      "request_id": "87eaf1dfb9ed4bdc85985894a0473b2f",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "AOV": "138.5100000000"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) / NULLIF(COUNT(DISTINCT fact_retail_line.sale_invoice), 0) AS AOV, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 AND fact_retail_line.country = :p2 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 2,
+            "p2": "Spain"
+          },
+          "definitions": {
+            "AOV": "平均订单金额GBP=销售额/去重订单数，分母为零返回空值，不是商品单价均值。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "AOV"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 2
+              },
+              {
+                "field": "fact_retail_line.country",
+                "op": "eq",
+                "value": "Spain"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 14.79
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-010",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2010年2月英国的有客户编号的活跃购买客户数是多少？",
+      "passed": true,
+      "elapsed_seconds": 6.633,
+      "http_status": 200,
+      "request_id": "e5643f68407b4592b75a44e5c9959832",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "ACTIVE_CUSTOMERS": 713
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT COUNT(DISTINCT fact_retail_line.sale_customer) AS ACTIVE_CUSTOMERS, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_country ON fact_retail_line.country = dim_country.country WHERE dim_date.year = :p0 AND dim_date.month = :p1 AND dim_country.country = :p2 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 2,
+            "p2": "United Kingdom"
+          },
+          "definitions": {
+            "ACTIVE_CUSTOMERS": "活跃购买客户数=合格销售明细中非空客户编号去重计数。未知客户不估算，不能代表全部购买人数。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "ACTIVE_CUSTOMERS"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 2
+              },
+              {
+                "field": "dim_country.country",
+                "op": "eq",
+                "value": "United Kingdom"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 51.05
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-015",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2010年3月的有客户编号的活跃购买客户数是多少？",
+      "passed": true,
+      "elapsed_seconds": 5.957,
+      "http_status": 200,
+      "request_id": "e17d3bfab85a4763bdc66c14f182a145",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "ACTIVE_CUSTOMERS": 1057
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT COUNT(DISTINCT fact_retail_line.sale_customer) AS ACTIVE_CUSTOMERS, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 3
+          },
+          "definitions": {
+            "ACTIVE_CUSTOMERS": "活跃购买客户数=合格销售明细中非空客户编号去重计数。未知客户不估算，不能代表全部购买人数。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "ACTIVE_CUSTOMERS"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 3
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 132.66
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-018",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2010年4月英国的平均订单金额是多少？",
+      "passed": true,
+      "elapsed_seconds": 4.331,
+      "http_status": 200,
+      "request_id": "33f451e806174eb886a2e866969aec98",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "AOV": "433.0442451852"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) / NULLIF(COUNT(DISTINCT fact_retail_line.sale_invoice), 0) AS AOV, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_country ON fact_retail_line.country = dim_country.country WHERE dim_date.year = :p0 AND dim_date.month = :p1 AND dim_country.country = :p2 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 4,
+            "p2": "United Kingdom"
+          },
+          "definitions": {
+            "AOV": "平均订单金额GBP=销售额/去重订单数，分母为零返回空值，不是商品单价均值。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "AOV"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 4
+              },
+              {
+                "field": "dim_country.country",
+                "op": "eq",
+                "value": "United Kingdom"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 84.3
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-019",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2010年4月法国的销量是多少？",
+      "passed": true,
+      "elapsed_seconds": 3.352,
+      "http_status": 200,
+      "request_id": "3a3fa76575eb4164882c5362e39fd41f",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "UNITS": "4156"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_units) AS UNITS, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_country ON fact_retail_line.country = dim_country.country WHERE dim_date.year = :p0 AND dim_date.month = :p1 AND dim_country.country = :p2 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 4,
+            "p2": "France"
+          },
+          "definitions": {
+            "UNITS": "销量=合格销售明细的数量之和，不包含取消单及非正数量或非正价格记录。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "UNITS"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 4
+              },
+              {
+                "field": "dim_country.country",
+                "op": "eq",
+                "value": "France"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 45.78
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-020",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2010年4月德国的有客户编号的活跃购买客户数是多少？",
+      "passed": true,
+      "elapsed_seconds": 5.544,
+      "http_status": 200,
+      "request_id": "2804fe6efa734b1388c293f4dd646dab",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "ACTIVE_CUSTOMERS": 22
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT COUNT(DISTINCT fact_retail_line.sale_customer) AS ACTIVE_CUSTOMERS, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_country ON fact_retail_line.country = dim_country.country WHERE dim_date.year = :p0 AND dim_date.month = :p1 AND dim_country.country = :p2 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 4,
+            "p2": "Germany"
+          },
+          "definitions": {
+            "ACTIVE_CUSTOMERS": "活跃购买客户数=合格销售明细中非空客户编号去重计数。未知客户不估算，不能代表全部购买人数。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "ACTIVE_CUSTOMERS"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 4
+              },
+              {
+                "field": "dim_country.country",
+                "op": "eq",
+                "value": "Germany"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 11.97
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-028",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2010年6月德国的平均订单金额是多少？",
+      "passed": true,
+      "elapsed_seconds": 5.4,
+      "http_status": 200,
+      "request_id": "0be7d499931e47ec9af334591f8dfcab",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "AOV": "580.6900000000"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) / NULLIF(COUNT(DISTINCT fact_retail_line.sale_invoice), 0) AS AOV, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_country ON fact_retail_line.country = dim_country.country WHERE dim_date.year = :p0 AND dim_date.month = :p1 AND dim_country.country = :p2 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 6,
+            "p2": "Germany"
+          },
+          "definitions": {
+            "AOV": "平均订单金额GBP=销售额/去重订单数，分母为零返回空值，不是商品单价均值。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "AOV"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 6
+              },
+              {
+                "field": "dim_country.country",
+                "op": "eq",
+                "value": "Germany"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 22.15
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-029",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2010年6月西班牙的销量是多少？",
+      "passed": true,
+      "elapsed_seconds": 4.329,
+      "http_status": 200,
+      "request_id": "841e4525a6a548998dac4a897feddf14",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "UNITS": "884"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_units) AS UNITS, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 AND fact_retail_line.country = :p2 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 6,
+            "p2": "Spain"
+          },
+          "definitions": {
+            "UNITS": "销量=合格销售明细的数量之和，不包含取消单及非正数量或非正价格记录。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "UNITS"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 6
+              },
+              {
+                "field": "fact_retail_line.country",
+                "op": "eq",
+                "value": "Spain"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 18.06
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-031",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2010年7月的销售额是多少？",
+      "passed": true,
+      "elapsed_seconds": 4.699,
+      "http_status": 200,
+      "request_id": "a73028c1475c4aefb93074c0e4bc1bf2",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "SALES_AMOUNT": "650712.940000"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year_month = :p0 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": "2010-07"
+          },
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year_month",
+                "op": "eq",
+                "value": "2010-07"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 161.02
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-033",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2010年7月的平均订单金额是多少？",
+      "passed": true,
+      "elapsed_seconds": 5.859,
+      "http_status": 200,
+      "request_id": "c1f88468712041569e4d2375c26564c6",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "AOV": "425.5807325049"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) / NULLIF(COUNT(DISTINCT fact_retail_line.sale_invoice), 0) AS AOV, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 7
+          },
+          "definitions": {
+            "AOV": "平均订单金额GBP=销售额/去重订单数，分母为零返回空值，不是商品单价均值。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "AOV"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 7
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 136.35
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-035",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2010年7月的有客户编号的活跃购买客户数是多少？",
+      "passed": true,
+      "elapsed_seconds": 5.862,
+      "http_status": 200,
+      "request_id": "228748ea2f514812bfd8b7d1f4b4a7f8",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "ACTIVE_CUSTOMERS": 928
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT COUNT(DISTINCT fact_retail_line.sale_customer) AS ACTIVE_CUSTOMERS, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 7
+          },
+          "definitions": {
+            "ACTIVE_CUSTOMERS": "活跃购买客户数=合格销售明细中非空客户编号去重计数。未知客户不估算，不能代表全部购买人数。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "ACTIVE_CUSTOMERS"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 7
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 41.89
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-036",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2010年8月德国的销售额是多少？",
+      "passed": true,
+      "elapsed_seconds": 3.657,
+      "http_status": 200,
+      "request_id": "d2b74b1a47144db7ba15345270742ce8",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "SALES_AMOUNT": "9943.120000"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_country ON fact_retail_line.country = dim_country.country WHERE dim_date.year = :p0 AND dim_date.month = :p1 AND dim_country.country = :p2 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 8,
+            "p2": "Germany"
+          },
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 8
+              },
+              {
+                "field": "dim_country.country",
+                "op": "eq",
+                "value": "Germany"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 41.73
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-037",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2010年8月西班牙的去重订单数是多少？",
+      "passed": true,
+      "elapsed_seconds": 4.286,
+      "http_status": 200,
+      "request_id": "ea288a270024453d8938808d550a7192",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "ORDER_COUNT": 5
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 AND fact_retail_line.country = :p2 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 8,
+            "p2": "Spain"
+          },
+          "definitions": {
+            "ORDER_COUNT": "去重订单数=合格销售明细的不同发票号数量，不是明细条数；分组订单数不可直接相加。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "ORDER_COUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 8
+              },
+              {
+                "field": "fact_retail_line.country",
+                "op": "eq",
+                "value": "Spain"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 70.03
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-047",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2010年10月英国的去重订单数是多少？",
+      "passed": true,
+      "elapsed_seconds": 4.413,
+      "http_status": 200,
+      "request_id": "65b81be241a84556b42a4c81f3feaad5",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "ORDER_COUNT": 2104
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_country ON fact_retail_line.country = dim_country.country WHERE dim_date.year = :p0 AND dim_date.month = :p1 AND dim_country.country = :p2 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 10,
+            "p2": "United Kingdom"
+          },
+          "definitions": {
+            "ORDER_COUNT": "去重订单数=合格销售明细的不同发票号数量，不是明细条数；分组订单数不可直接相加。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "ORDER_COUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 10
+              },
+              {
+                "field": "dim_country.country",
+                "op": "eq",
+                "value": "United Kingdom"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 365.89
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-048",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2010年10月法国的平均订单金额是多少？",
+      "passed": true,
+      "elapsed_seconds": 4.246,
+      "http_status": 200,
+      "request_id": "abca68673b7d4e92a4b91a22e28f7eeb",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "AOV": "543.2775000000"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) / NULLIF(COUNT(DISTINCT fact_retail_line.sale_invoice), 0) AS AOV, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_country ON fact_retail_line.country = dim_country.country WHERE dim_date.year = :p0 AND dim_date.month = :p1 AND dim_country.country = :p2 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 10,
+            "p2": "France"
+          },
+          "definitions": {
+            "AOV": "平均订单金额GBP=销售额/去重订单数，分母为零返回空值，不是商品单价均值。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "AOV"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 10
+              },
+              {
+                "field": "dim_country.country",
+                "op": "eq",
+                "value": "France"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 23.04
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-051",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2010年11月的销售额是多少？",
+      "passed": true,
+      "elapsed_seconds": 4.513,
+      "http_status": 200,
+      "request_id": "6d7e99e5238f437b872751353fc109fa",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "SALES_AMOUNT": "1470272.482000"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 11
+          },
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 11
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 506.09
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-053",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2010年11月的平均订单金额是多少？",
+      "passed": true,
+      "elapsed_seconds": 5.48,
+      "http_status": 200,
+      "request_id": "70627d67600e41d9890bf8959e899332",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "AOV": "535.2284244631"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) / NULLIF(COUNT(DISTINCT fact_retail_line.sale_invoice), 0) AS AOV, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year_month = :p0 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": "2010-11"
+          },
+          "definitions": {
+            "AOV": "平均订单金额GBP=销售额/去重订单数，分母为零返回空值，不是商品单价均值。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "AOV"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year_month",
+                "op": "eq",
+                "value": "2010-11"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 123.36
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-062",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2011年1月的去重订单数是多少？",
+      "passed": true,
+      "elapsed_seconds": 4.606,
+      "http_status": 200,
+      "request_id": "7768b90e69684df0b835b055d80c8db9",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "ORDER_COUNT": 1086
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year_month = :p0 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": "2011-01"
+          },
+          "definitions": {
+            "ORDER_COUNT": "去重订单数=合格销售明细的不同发票号数量，不是明细条数；分组订单数不可直接相加。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "ORDER_COUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year_month",
+                "op": "eq",
+                "value": "2011-01"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 556.21
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-066",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2011年2月西班牙的销售额是多少？",
+      "passed": true,
+      "elapsed_seconds": 4.195,
+      "http_status": 200,
+      "request_id": "1fc9a20c15c84a0787f221a1bea7b435",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "SALES_AMOUNT": "2114.500000"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 AND fact_retail_line.country = :p2 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2011,
+            "p1": 2,
+            "p2": "Spain"
+          },
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 2
+              },
+              {
+                "field": "fact_retail_line.country",
+                "op": "eq",
+                "value": "Spain"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 23.95
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-067",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2011年2月荷兰的去重订单数是多少？",
+      "passed": true,
+      "elapsed_seconds": 3.722,
+      "http_status": 200,
+      "request_id": "fe0a59b971db4c5288b89ceef3719e39",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "ORDER_COUNT": 5
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 AND fact_retail_line.country = :p2 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2011,
+            "p1": 2,
+            "p2": "Netherlands"
+          },
+          "definitions": {
+            "ORDER_COUNT": "去重订单数=合格销售明细的不同发票号数量，不是明细条数；分组订单数不可直接相加。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "ORDER_COUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 2
+              },
+              {
+                "field": "fact_retail_line.country",
+                "op": "eq",
+                "value": "Netherlands"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 20.38
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-073",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2011年3月的平均订单金额是多少？",
+      "passed": true,
+      "elapsed_seconds": 7.635,
+      "http_status": 200,
+      "request_id": "21708104fa544a048dec11cd32cd22df",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "AOV": "493.5621458047"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) / NULLIF(COUNT(DISTINCT fact_retail_line.sale_invoice), 0) AS AOV, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2011,
+            "p1": 3
+          },
+          "definitions": {
+            "AOV": "平均订单金额GBP=销售额/去重订单数，分母为零返回空值，不是商品单价均值。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "AOV"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 3
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 93.72
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-075",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2011年3月的有客户编号的活跃购买客户数是多少？",
+      "passed": true,
+      "elapsed_seconds": 6.788,
+      "http_status": 200,
+      "request_id": "00cd217e9f83491fa42c9626c63684bb",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "ACTIVE_CUSTOMERS": 974
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT COUNT(DISTINCT fact_retail_line.sale_customer) AS ACTIVE_CUSTOMERS, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2011,
+            "p1": 3
+          },
+          "definitions": {
+            "ACTIVE_CUSTOMERS": "活跃购买客户数=合格销售明细中非空客户编号去重计数。未知客户不估算，不能代表全部购买人数。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "ACTIVE_CUSTOMERS"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 3
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 129.98
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-080",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2011年4月荷兰的有客户编号的活跃购买客户数是多少？",
+      "passed": true,
+      "elapsed_seconds": 5.261,
+      "http_status": 200,
+      "request_id": "9d4065b694774302a273eb6b03280b6f",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "ACTIVE_CUSTOMERS": 1
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT COUNT(DISTINCT fact_retail_line.sale_customer) AS ACTIVE_CUSTOMERS, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 AND fact_retail_line.country = :p2 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2011,
+            "p1": 4,
+            "p2": "Netherlands"
+          },
+          "definitions": {
+            "ACTIVE_CUSTOMERS": "活跃购买客户数=合格销售明细中非空客户编号去重计数。未知客户不估算，不能代表全部购买人数。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "ACTIVE_CUSTOMERS"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 4
+              },
+              {
+                "field": "fact_retail_line.country",
+                "op": "eq",
+                "value": "Netherlands"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 28.78
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-081",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2011年5月的销售额是多少？",
+      "passed": true,
+      "elapsed_seconds": 5.766,
+      "http_status": 200,
+      "request_id": "2ff553088d854cc19cdfb3763589b00d",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "SALES_AMOUNT": "770536.020000"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2011,
+            "p1": 5
+          },
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 5
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 329.72
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-082",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2011年5月的去重订单数是多少？",
+      "passed": true,
+      "elapsed_seconds": 4.859,
+      "http_status": 200,
+      "request_id": "e973a75aef99406f8574d0fa093821c3",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "ORDER_COUNT": 1681
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2011,
+            "p1": 5
+          },
+          "definitions": {
+            "ORDER_COUNT": "去重订单数=合格销售明细的不同发票号数量，不是明细条数；分组订单数不可直接相加。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "ORDER_COUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 5
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 211.48
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-090",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2011年6月法国的有客户编号的活跃购买客户数是多少？",
+      "passed": true,
+      "elapsed_seconds": 5.694,
+      "http_status": 200,
+      "request_id": "029c9db9e11649b5b7cd289f35600ccf",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "ACTIVE_CUSTOMERS": 25
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT COUNT(DISTINCT fact_retail_line.sale_customer) AS ACTIVE_CUSTOMERS, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_country ON fact_retail_line.country = dim_country.country WHERE dim_date.year = :p0 AND dim_date.month = :p1 AND dim_country.country = :p2 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2011,
+            "p1": 6,
+            "p2": "France"
+          },
+          "definitions": {
+            "ACTIVE_CUSTOMERS": "活跃购买客户数=合格销售明细中非空客户编号去重计数。未知客户不估算，不能代表全部购买人数。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "ACTIVE_CUSTOMERS"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 6
+              },
+              {
+                "field": "dim_country.country",
+                "op": "eq",
+                "value": "France"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 39.54
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-093",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2011年7月的平均订单金额是多少？",
+      "passed": true,
+      "elapsed_seconds": 6.212,
+      "http_status": 200,
+      "request_id": "6fdc5e64d8a64d789fd13cc1317166ea",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "AOV": "487.6075871186"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) / NULLIF(COUNT(DISTINCT fact_retail_line.sale_invoice), 0) AS AOV, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2011,
+            "p1": 7
+          },
+          "definitions": {
+            "AOV": "平均订单金额GBP=销售额/去重订单数，分母为零返回空值，不是商品单价均值。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "AOV"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 7
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 106.05
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-104",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2011年9月的销量是多少？",
+      "passed": true,
+      "elapsed_seconds": 4.476,
+      "http_status": 200,
+      "request_id": "8b4b92958271432384ba4fc3798da705",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "UNITS": "570820"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_units) AS UNITS, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2011,
+            "p1": 9
+          },
+          "definitions": {
+            "UNITS": "销量=合格销售明细的数量之和，不包含取消单及非正数量或非正价格记录。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "UNITS"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 9
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 503.09
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-109",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2011年10月荷兰的销量是多少？",
+      "passed": true,
+      "elapsed_seconds": 4.094,
+      "http_status": 200,
+      "request_id": "972b489c81cc4e0d9a196f8f7d4b7389",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "UNITS": "27230"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_units) AS UNITS, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 AND fact_retail_line.country = :p2 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2011,
+            "p1": 10,
+            "p2": "Netherlands"
+          },
+          "definitions": {
+            "UNITS": "销量=合格销售明细的数量之和，不包含取消单及非正数量或非正价格记录。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "UNITS"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 10
+              },
+              {
+                "field": "fact_retail_line.country",
+                "op": "eq",
+                "value": "Netherlands"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 24.29
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-110",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2011年10月英国的有客户编号的活跃购买客户数是多少？",
+      "passed": true,
+      "elapsed_seconds": 5.806,
+      "http_status": 200,
+      "request_id": "0fa99a6f6add46ed81b63883d0719b22",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "ACTIVE_CUSTOMERS": 1230
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT COUNT(DISTINCT fact_retail_line.sale_customer) AS ACTIVE_CUSTOMERS, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_country ON fact_retail_line.country = dim_country.country WHERE dim_date.year = :p0 AND dim_date.month = :p1 AND dim_country.country = :p2 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2011,
+            "p1": 10,
+            "p2": "United Kingdom"
+          },
+          "definitions": {
+            "ACTIVE_CUSTOMERS": "活跃购买客户数=合格销售明细中非空客户编号去重计数。未知客户不估算，不能代表全部购买人数。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "ACTIVE_CUSTOMERS"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 10
+              },
+              {
+                "field": "dim_country.country",
+                "op": "eq",
+                "value": "United Kingdom"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 498.86
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-120",
+      "family": "monthly_scalar",
+      "split": "development",
+      "question": "2011年12月德国的有客户编号的活跃购买客户数是多少？",
+      "passed": true,
+      "elapsed_seconds": 6.637,
+      "http_status": 200,
+      "request_id": "03da2dc2163e47c799d0205b20e81a59",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "ACTIVE_CUSTOMERS": 12
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT COUNT(DISTINCT fact_retail_line.sale_customer) AS ACTIVE_CUSTOMERS, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id LEFT JOIN dim_country ON fact_retail_line.country = dim_country.country WHERE dim_date.year = :p0 AND dim_date.month = :p1 AND dim_country.country = :p2 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2011,
+            "p1": 12,
+            "p2": "Germany"
+          },
+          "definitions": {
+            "ACTIVE_CUSTOMERS": "活跃购买客户数=合格销售明细中非空客户编号去重计数。未知客户不估算，不能代表全部购买人数。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "ACTIVE_CUSTOMERS"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 12
+              },
+              {
+                "field": "dim_country.country",
+                "op": "eq",
+                "value": "Germany"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 18.22
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-125",
+      "family": "country_group",
+      "split": "development",
+      "question": "按国家分别统计2010年9月的销售额",
+      "passed": true,
+      "elapsed_seconds": 4.621,
+      "http_status": 200,
+      "request_id": "46095699fe154bf9aab94b2d84058beb",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "SALES_AMOUNT": "773073.501000",
+            "fact_retail_line__country": "United Kingdom"
+          },
+          {
+            "SALES_AMOUNT": "17740.180000",
+            "fact_retail_line__country": "Germany"
+          },
+          {
+            "SALES_AMOUNT": "45037.140000",
+            "fact_retail_line__country": "Netherlands"
+          },
+          {
+            "SALES_AMOUNT": "14531.330000",
+            "fact_retail_line__country": "France"
+          },
+          {
+            "SALES_AMOUNT": "1978.150000",
+            "fact_retail_line__country": "Unspecified"
+          },
+          {
+            "SALES_AMOUNT": "2964.580000",
+            "fact_retail_line__country": "Portugal"
+          },
+          {
+            "SALES_AMOUNT": "1020.530000",
+            "fact_retail_line__country": "Cyprus"
+          },
+          {
+            "SALES_AMOUNT": "36984.470000",
+            "fact_retail_line__country": "EIRE"
+          },
+          {
+            "SALES_AMOUNT": "383.240000",
+            "fact_retail_line__country": "United Arab Emirates"
+          },
+          {
+            "SALES_AMOUNT": "1940.170000",
+            "fact_retail_line__country": "Austria"
+          },
+          {
+            "SALES_AMOUNT": "2474.440000",
+            "fact_retail_line__country": "Switzerland"
+          },
+          {
+            "SALES_AMOUNT": "785.830000",
+            "fact_retail_line__country": "Australia"
+          },
+          {
+            "SALES_AMOUNT": "3770.450000",
+            "fact_retail_line__country": "Spain"
+          },
+          {
+            "SALES_AMOUNT": "1190.910000",
+            "fact_retail_line__country": "Belgium"
+          },
+          {
+            "SALES_AMOUNT": "2784.820000",
+            "fact_retail_line__country": "Singapore"
+          },
+          {
+            "SALES_AMOUNT": "2899.560000",
+            "fact_retail_line__country": "Sweden"
+          },
+          {
+            "SALES_AMOUNT": "6156.340000",
+            "fact_retail_line__country": "Channel Islands"
+          },
+          {
+            "SALES_AMOUNT": "349.470000",
+            "fact_retail_line__country": "Poland"
+          },
+          {
+            "SALES_AMOUNT": "1380.560000",
+            "fact_retail_line__country": "Italy"
+          },
+          {
+            "SALES_AMOUNT": "1895.000000",
+            "fact_retail_line__country": "Japan"
+          },
+          {
+            "SALES_AMOUNT": "864.680000",
+            "fact_retail_line__country": "Finland"
+          },
+          {
+            "SALES_AMOUNT": "211.700000",
+            "fact_retail_line__country": "Lebanon"
+          },
+          {
+            "SALES_AMOUNT": "0.000000",
+            "fact_retail_line__country": "USA"
+          },
+          {
+            "SALES_AMOUNT": "168.690000",
+            "fact_retail_line__country": "Korea"
+          },
+          {
+            "SALES_AMOUNT": "973.690000",
+            "fact_retail_line__country": "Norway"
+          },
+          {
+            "SALES_AMOUNT": "268.270000",
+            "fact_retail_line__country": "Brazil"
+          },
+          {
+            "SALES_AMOUNT": "780.060000",
+            "fact_retail_line__country": "Greece"
+          },
+          {
+            "SALES_AMOUNT": "1725.250000",
+            "fact_retail_line__country": "Denmark"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 28 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, fact_retail_line.country AS fact_retail_line__country, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 GROUP BY fact_retail_line.country HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 9
+          },
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [
+              "fact_retail_line.country"
+            ],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 9
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 274.98
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-127",
+      "family": "product_top10",
+      "split": "development",
+      "question": "2010年9月按商品代码分组，销售额最高的前10个商品代码及其销售额",
+      "passed": true,
+      "elapsed_seconds": 5.736,
+      "http_status": 200,
+      "request_id": "32cbcb7eddc946cea6ecfff1292d7903",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "SALES_AMOUNT": "41085.050000",
+            "fact_retail_line__stock_code": "M"
+          },
+          {
+            "SALES_AMOUNT": "24771.170000",
+            "fact_retail_line__stock_code": "22423"
+          },
+          {
+            "SALES_AMOUNT": "12284.690000",
+            "fact_retail_line__stock_code": "85099B"
+          },
+          {
+            "SALES_AMOUNT": "11766.540000",
+            "fact_retail_line__stock_code": "85123A"
+          },
+          {
+            "SALES_AMOUNT": "6841.210000",
+            "fact_retail_line__stock_code": "84879"
+          },
+          {
+            "SALES_AMOUNT": "6505.780000",
+            "fact_retail_line__stock_code": "21621"
+          },
+          {
+            "SALES_AMOUNT": "6436.580000",
+            "fact_retail_line__stock_code": "DOT"
+          },
+          {
+            "SALES_AMOUNT": "5083.630000",
+            "fact_retail_line__stock_code": "84347"
+          },
+          {
+            "SALES_AMOUNT": "5033.630000",
+            "fact_retail_line__stock_code": "21622"
+          },
+          {
+            "SALES_AMOUNT": "4902.340000",
+            "fact_retail_line__stock_code": "22470"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 10 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, fact_retail_line.stock_code AS fact_retail_line__stock_code, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 GROUP BY fact_retail_line.stock_code HAVING COUNT(*) > 0 ORDER BY SALES_AMOUNT DESC LIMIT 10",
+          "parameters": {
+            "p0": 2010,
+            "p1": 9
+          },
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [
+              "fact_retail_line.stock_code"
+            ],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 9
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": "SALES_AMOUNT",
+            "descending": true,
+            "limit": 10
+          },
+          "row_limit": 200,
+          "possibly_truncated": true
+        },
+        "execution_ms": 186.3
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-130",
+      "family": "country_group",
+      "split": "development",
+      "question": "按国家分别统计2010年10月的取消金额",
+      "passed": true,
+      "elapsed_seconds": 5.226,
+      "http_status": 200,
+      "request_id": "2cf2fa8c08624594bc53f8dfbdfa25b8",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "CANCEL_AMOUNT": "66916.160000",
+            "fact_retail_line__country": "United Kingdom"
+          },
+          {
+            "CANCEL_AMOUNT": "4733.520000",
+            "fact_retail_line__country": "Spain"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Austria"
+          },
+          {
+            "CANCEL_AMOUNT": "57.650000",
+            "fact_retail_line__country": "Channel Islands"
+          },
+          {
+            "CANCEL_AMOUNT": "442.250000",
+            "fact_retail_line__country": "Italy"
+          },
+          {
+            "CANCEL_AMOUNT": "29.300000",
+            "fact_retail_line__country": "Finland"
+          },
+          {
+            "CANCEL_AMOUNT": "52.460000",
+            "fact_retail_line__country": "Sweden"
+          },
+          {
+            "CANCEL_AMOUNT": "464.580000",
+            "fact_retail_line__country": "Germany"
+          },
+          {
+            "CANCEL_AMOUNT": "324.240000",
+            "fact_retail_line__country": "Netherlands"
+          },
+          {
+            "CANCEL_AMOUNT": "7253.360000",
+            "fact_retail_line__country": "EIRE"
+          },
+          {
+            "CANCEL_AMOUNT": "609.240000",
+            "fact_retail_line__country": "France"
+          },
+          {
+            "CANCEL_AMOUNT": "168.690000",
+            "fact_retail_line__country": "Korea"
+          },
+          {
+            "CANCEL_AMOUNT": "75.450000",
+            "fact_retail_line__country": "Portugal"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Belgium"
+          },
+          {
+            "CANCEL_AMOUNT": "18.250000",
+            "fact_retail_line__country": "Greece"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Australia"
+          },
+          {
+            "CANCEL_AMOUNT": "50.400000",
+            "fact_retail_line__country": "Denmark"
+          },
+          {
+            "CANCEL_AMOUNT": "78.150000",
+            "fact_retail_line__country": "Switzerland"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Cyprus"
+          },
+          {
+            "CANCEL_AMOUNT": "76.320000",
+            "fact_retail_line__country": "United Arab Emirates"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "USA"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Japan"
+          },
+          {
+            "CANCEL_AMOUNT": "39.670000",
+            "fact_retail_line__country": "Lebanon"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Canada"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Bahrain"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "RSA"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Iceland"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 27 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.cancel_amount) AS CANCEL_AMOUNT, fact_retail_line.country AS fact_retail_line__country, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 GROUP BY fact_retail_line.country HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 10
+          },
+          "definitions": {
+            "CANCEL_AMOUNT": "取消金额GBP=C开头发票且数量<0且单价>0的明细绝对金额之和；不是经过支付流水验证的实际退款。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "CANCEL_AMOUNT"
+            ],
+            "dimensions": [
+              "fact_retail_line.country"
+            ],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 10
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 347.5
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-134",
+      "family": "country_group",
+      "split": "development",
+      "question": "按国家分别统计2010年11月的取消金额",
+      "passed": true,
+      "elapsed_seconds": 6.942,
+      "http_status": 200,
+      "request_id": "c03ad7a5e1a04dcd8d6d0a0ceb1d899a",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "CANCEL_AMOUNT": "36373.510000",
+            "fact_retail_line__country": "United Kingdom"
+          },
+          {
+            "CANCEL_AMOUNT": "1435.290000",
+            "fact_retail_line__country": "RSA"
+          },
+          {
+            "CANCEL_AMOUNT": "557.170000",
+            "fact_retail_line__country": "EIRE"
+          },
+          {
+            "CANCEL_AMOUNT": "1057.300000",
+            "fact_retail_line__country": "Channel Islands"
+          },
+          {
+            "CANCEL_AMOUNT": "120.400000",
+            "fact_retail_line__country": "France"
+          },
+          {
+            "CANCEL_AMOUNT": "613.600000",
+            "fact_retail_line__country": "Germany"
+          },
+          {
+            "CANCEL_AMOUNT": "127.900000",
+            "fact_retail_line__country": "Sweden"
+          },
+          {
+            "CANCEL_AMOUNT": "37.700000",
+            "fact_retail_line__country": "Australia"
+          },
+          {
+            "CANCEL_AMOUNT": "47.800000",
+            "fact_retail_line__country": "Portugal"
+          },
+          {
+            "CANCEL_AMOUNT": "4107.460000",
+            "fact_retail_line__country": "Spain"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Switzerland"
+          },
+          {
+            "CANCEL_AMOUNT": "183.600000",
+            "fact_retail_line__country": "Denmark"
+          },
+          {
+            "CANCEL_AMOUNT": "110.380000",
+            "fact_retail_line__country": "Italy"
+          },
+          {
+            "CANCEL_AMOUNT": "2383.830000",
+            "fact_retail_line__country": "Netherlands"
+          },
+          {
+            "CANCEL_AMOUNT": "74.700000",
+            "fact_retail_line__country": "Belgium"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Norway"
+          },
+          {
+            "CANCEL_AMOUNT": "227.600000",
+            "fact_retail_line__country": "Japan"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Lithuania"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Austria"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Finland"
+          },
+          {
+            "CANCEL_AMOUNT": "11.800000",
+            "fact_retail_line__country": "Unspecified"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Canada"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Cyprus"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "United Arab Emirates"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Israel"
+          },
+          {
+            "CANCEL_AMOUNT": "15.000000",
+            "fact_retail_line__country": "Poland"
+          },
+          {
+            "CANCEL_AMOUNT": "132.800000",
+            "fact_retail_line__country": "USA"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Greece"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Korea"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 29 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.cancel_amount) AS CANCEL_AMOUNT, fact_retail_line.country AS fact_retail_line__country, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 GROUP BY fact_retail_line.country HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 11
+          },
+          "definitions": {
+            "CANCEL_AMOUNT": "取消金额GBP=C开头发票且数量<0且单价>0的明细绝对金额之和；不是经过支付流水验证的实际退款。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "CANCEL_AMOUNT"
+            ],
+            "dimensions": [
+              "fact_retail_line.country"
+            ],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 11
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 540.77
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-138",
+      "family": "country_group",
+      "split": "development",
+      "question": "按国家分别统计2010年12月的取消金额",
+      "passed": true,
+      "elapsed_seconds": 8.425,
+      "http_status": 200,
+      "request_id": "d86dd7d7235441ab8f16c69f9de08ae6",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "CANCEL_AMOUNT": "132625.560000",
+            "fact_retail_line__country": "United Kingdom"
+          },
+          {
+            "CANCEL_AMOUNT": "68.100000",
+            "fact_retail_line__country": "France"
+          },
+          {
+            "CANCEL_AMOUNT": "27.750000",
+            "fact_retail_line__country": "Australia"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Netherlands"
+          },
+          {
+            "CANCEL_AMOUNT": "891.650000",
+            "fact_retail_line__country": "Germany"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Norway"
+          },
+          {
+            "CANCEL_AMOUNT": "1010.810000",
+            "fact_retail_line__country": "EIRE"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Switzerland"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Spain"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Poland"
+          },
+          {
+            "CANCEL_AMOUNT": "59.850000",
+            "fact_retail_line__country": "Portugal"
+          },
+          {
+            "CANCEL_AMOUNT": "34.000000",
+            "fact_retail_line__country": "Italy"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Belgium"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Lithuania"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Japan"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Iceland"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Channel Islands"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Denmark"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Cyprus"
+          },
+          {
+            "CANCEL_AMOUNT": "1188.000000",
+            "fact_retail_line__country": "Sweden"
+          },
+          {
+            "CANCEL_AMOUNT": "20.160000",
+            "fact_retail_line__country": "Austria"
+          },
+          {
+            "CANCEL_AMOUNT": "227.440000",
+            "fact_retail_line__country": "Israel"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Finland"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Bahrain"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 24 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.cancel_amount) AS CANCEL_AMOUNT, fact_retail_line.country AS fact_retail_line__country, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 GROUP BY fact_retail_line.country HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 12
+          },
+          "definitions": {
+            "CANCEL_AMOUNT": "取消金额GBP=C开头发票且数量<0且单价>0的明细绝对金额之和；不是经过支付流水验证的实际退款。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "CANCEL_AMOUNT"
+            ],
+            "dimensions": [
+              "fact_retail_line.country"
+            ],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 12
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 822.99
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-157",
+      "family": "country_group",
+      "split": "development",
+      "question": "按国家分别统计2011年5月的销售额",
+      "passed": true,
+      "elapsed_seconds": 9.053,
+      "http_status": 200,
+      "request_id": "c77100b97fb3406481a99f4c3ba976d6",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "SALES_AMOUNT": "639314.360000",
+            "fact_retail_line__country": "United Kingdom"
+          },
+          {
+            "SALES_AMOUNT": "25751.200000",
+            "fact_retail_line__country": "Germany"
+          },
+          {
+            "SALES_AMOUNT": "17614.880000",
+            "fact_retail_line__country": "France"
+          },
+          {
+            "SALES_AMOUNT": "2681.980000",
+            "fact_retail_line__country": "Sweden"
+          },
+          {
+            "SALES_AMOUNT": "3610.010000",
+            "fact_retail_line__country": "Switzerland"
+          },
+          {
+            "SALES_AMOUNT": "18008.760000",
+            "fact_retail_line__country": "EIRE"
+          },
+          {
+            "SALES_AMOUNT": "534.240000",
+            "fact_retail_line__country": "Canada"
+          },
+          {
+            "SALES_AMOUNT": "3257.600000",
+            "fact_retail_line__country": "Spain"
+          },
+          {
+            "SALES_AMOUNT": "2732.400000",
+            "fact_retail_line__country": "Belgium"
+          },
+          {
+            "SALES_AMOUNT": "1522.370000",
+            "fact_retail_line__country": "Poland"
+          },
+          {
+            "SALES_AMOUNT": "1249.430000",
+            "fact_retail_line__country": "Austria"
+          },
+          {
+            "SALES_AMOUNT": "548.400000",
+            "fact_retail_line__country": "Bahrain"
+          },
+          {
+            "SALES_AMOUNT": "1055.870000",
+            "fact_retail_line__country": "Unspecified"
+          },
+          {
+            "SALES_AMOUNT": "515.700000",
+            "fact_retail_line__country": "Denmark"
+          },
+          {
+            "SALES_AMOUNT": "29185.880000",
+            "fact_retail_line__country": "Netherlands"
+          },
+          {
+            "SALES_AMOUNT": "13638.410000",
+            "fact_retail_line__country": "Australia"
+          },
+          {
+            "SALES_AMOUNT": "4202.230000",
+            "fact_retail_line__country": "Portugal"
+          },
+          {
+            "SALES_AMOUNT": "1351.450000",
+            "fact_retail_line__country": "Japan"
+          },
+          {
+            "SALES_AMOUNT": "1966.160000",
+            "fact_retail_line__country": "Hong Kong"
+          },
+          {
+            "SALES_AMOUNT": "1207.240000",
+            "fact_retail_line__country": "Channel Islands"
+          },
+          {
+            "SALES_AMOUNT": "587.450000",
+            "fact_retail_line__country": "Italy"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 21 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, fact_retail_line.country AS fact_retail_line__country, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 GROUP BY fact_retail_line.country HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2011,
+            "p1": 5
+          },
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [
+              "fact_retail_line.country"
+            ],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 5
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 705.3
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-158",
+      "family": "country_group",
+      "split": "development",
+      "question": "按国家分别统计2011年5月的取消金额",
+      "passed": true,
+      "elapsed_seconds": 10.109,
+      "http_status": 200,
+      "request_id": "78405534fc1340b68e2a87e9a5c602cb",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "CANCEL_AMOUNT": "42854.500000",
+            "fact_retail_line__country": "United Kingdom"
+          },
+          {
+            "CANCEL_AMOUNT": "179.850000",
+            "fact_retail_line__country": "Germany"
+          },
+          {
+            "CANCEL_AMOUNT": "87.800000",
+            "fact_retail_line__country": "France"
+          },
+          {
+            "CANCEL_AMOUNT": "17.000000",
+            "fact_retail_line__country": "Sweden"
+          },
+          {
+            "CANCEL_AMOUNT": "42.800000",
+            "fact_retail_line__country": "Switzerland"
+          },
+          {
+            "CANCEL_AMOUNT": "87.410000",
+            "fact_retail_line__country": "EIRE"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Canada"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Spain"
+          },
+          {
+            "CANCEL_AMOUNT": "5.400000",
+            "fact_retail_line__country": "Belgium"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Poland"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Austria"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Bahrain"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Unspecified"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Denmark"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Netherlands"
+          },
+          {
+            "CANCEL_AMOUNT": "9.900000",
+            "fact_retail_line__country": "Australia"
+          },
+          {
+            "CANCEL_AMOUNT": "3614.400000",
+            "fact_retail_line__country": "Portugal"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Japan"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Hong Kong"
+          },
+          {
+            "CANCEL_AMOUNT": "303.450000",
+            "fact_retail_line__country": "Channel Islands"
+          },
+          {
+            "CANCEL_AMOUNT": "0.000000",
+            "fact_retail_line__country": "Italy"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 21 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.cancel_amount) AS CANCEL_AMOUNT, fact_retail_line.country AS fact_retail_line__country, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 GROUP BY fact_retail_line.country HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2011,
+            "p1": 5
+          },
+          "definitions": {
+            "CANCEL_AMOUNT": "取消金额GBP=C开头发票且数量<0且单价>0的明细绝对金额之和；不是经过支付流水验证的实际退款。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "CANCEL_AMOUNT"
+            ],
+            "dimensions": [
+              "fact_retail_line.country"
+            ],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 5
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 254.52
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-159",
+      "family": "product_top10",
+      "split": "development",
+      "question": "2011年5月按商品代码分组，销售额最高的前10个商品代码及其销售额",
+      "passed": true,
+      "elapsed_seconds": 8.746,
+      "http_status": 200,
+      "request_id": "1611c391d80548dfaac6ebd3169bf40c",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "SALES_AMOUNT": "19147.750000",
+            "fact_retail_line__stock_code": "47566"
+          },
+          {
+            "SALES_AMOUNT": "13358.750000",
+            "fact_retail_line__stock_code": "POST"
+          },
+          {
+            "SALES_AMOUNT": "12645.970000",
+            "fact_retail_line__stock_code": "22423"
+          },
+          {
+            "SALES_AMOUNT": "11216.420000",
+            "fact_retail_line__stock_code": "85123A"
+          },
+          {
+            "SALES_AMOUNT": "10229.300000",
+            "fact_retail_line__stock_code": "DOT"
+          },
+          {
+            "SALES_AMOUNT": "8311.970000",
+            "fact_retail_line__stock_code": "23298"
+          },
+          {
+            "SALES_AMOUNT": "7122.730000",
+            "fact_retail_line__stock_code": "85099B"
+          },
+          {
+            "SALES_AMOUNT": "5952.260000",
+            "fact_retail_line__stock_code": "23284"
+          },
+          {
+            "SALES_AMOUNT": "5832.040000",
+            "fact_retail_line__stock_code": "22501"
+          },
+          {
+            "SALES_AMOUNT": "5221.230000",
+            "fact_retail_line__stock_code": "M"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 10 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, fact_retail_line.stock_code AS fact_retail_line__stock_code, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 GROUP BY fact_retail_line.stock_code HAVING COUNT(*) > 0 ORDER BY SALES_AMOUNT DESC LIMIT 10",
+          "parameters": {
+            "p0": 2011,
+            "p1": 5
+          },
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [
+              "fact_retail_line.stock_code"
+            ],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 5
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": "SALES_AMOUNT",
+            "descending": true,
+            "limit": 10
+          },
+          "row_limit": 200,
+          "possibly_truncated": true
+        },
+        "execution_ms": 218.39
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-160",
+      "family": "monthly_trend",
+      "split": "development",
+      "question": "按年月列出2011年荷兰每个月的销售额",
+      "passed": true,
+      "elapsed_seconds": 6.12,
+      "http_status": 200,
+      "request_id": "834ad1431643472486e04007843c7a8f",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "SALES_AMOUNT": "26611.160000",
+            "dim_date__year_month": "2011-01"
+          },
+          {
+            "SALES_AMOUNT": "23011.910000",
+            "dim_date__year_month": "2011-02"
+          },
+          {
+            "SALES_AMOUNT": "22416.490000",
+            "dim_date__year_month": "2011-03"
+          },
+          {
+            "SALES_AMOUNT": "2976.560000",
+            "dim_date__year_month": "2011-04"
+          },
+          {
+            "SALES_AMOUNT": "29185.880000",
+            "dim_date__year_month": "2011-05"
+          },
+          {
+            "SALES_AMOUNT": "26858.090000",
+            "dim_date__year_month": "2011-06"
+          },
+          {
+            "SALES_AMOUNT": "26.020000",
+            "dim_date__year_month": "2011-07"
+          },
+          {
+            "SALES_AMOUNT": "40327.810000",
+            "dim_date__year_month": "2011-08"
+          },
+          {
+            "SALES_AMOUNT": "26937.260000",
+            "dim_date__year_month": "2011-09"
+          },
+          {
+            "SALES_AMOUNT": "40708.650000",
+            "dim_date__year_month": "2011-10"
+          },
+          {
+            "SALES_AMOUNT": "25874.010000",
+            "dim_date__year_month": "2011-11"
+          },
+          {
+            "SALES_AMOUNT": "11728.020000",
+            "dim_date__year_month": "2011-12"
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 12 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, dim_date.year_month AS dim_date__year_month, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND fact_retail_line.country = :p1 GROUP BY dim_date.year_month HAVING COUNT(*) > 0 ORDER BY dim_date__year_month ASC LIMIT 100",
+          "parameters": {
+            "p0": 2011,
+            "p1": "Netherlands"
+          },
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "SALES_AMOUNT"
+            ],
+            "dimensions": [
+              "dim_date.year_month"
+            ],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "fact_retail_line.country",
+                "op": "eq",
+                "value": "Netherlands"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": "dim_date.year_month",
+            "descending": false,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 70.9
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-161",
+      "family": "multiple_metrics",
+      "split": "development",
+      "question": "统计2010年1月的原始明细条数和取消发票数",
+      "passed": true,
+      "elapsed_seconds": 7.297,
+      "http_status": 200,
+      "request_id": "f465bf71b1ce4bdfb446e88f1e47cf58",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "LINE_COUNT": 31555,
+            "CANCEL_INVOICE_COUNT": 300
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT COUNT(*) AS LINE_COUNT, COUNT(DISTINCT fact_retail_line.cancel_invoice) AS CANCEL_INVOICE_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 1
+          },
+          "definitions": {
+            "LINE_COUNT": "原始明细条数，含取消、调整、重复和未知客户记录；不是订单数。",
+            "CANCEL_INVOICE_COUNT": "取消发票数=C开头发票且数量<0且单价>0的不同发票号数量。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "LINE_COUNT",
+              "CANCEL_INVOICE_COUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 1
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 70.6
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-164",
+      "family": "multiple_metrics",
+      "split": "development",
+      "question": "统计2010年4月的销售额和去重订单数",
+      "passed": true,
+      "elapsed_seconds": 6.713,
+      "http_status": 200,
+      "request_id": "c0267895b3d3443bb28297a941b29ff8",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "SALES_AMOUNT": "681528.992000",
+            "ORDER_COUNT": 1462
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) AS SALES_AMOUNT, COUNT(DISTINCT fact_retail_line.sale_invoice) AS ORDER_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 4
+          },
+          "definitions": {
+            "SALES_AMOUNT": "销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。",
+            "ORDER_COUNT": "去重订单数=合格销售明细的不同发票号数量，不是明细条数；分组订单数不可直接相加。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "SALES_AMOUNT",
+              "ORDER_COUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 4
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 128.98
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-171",
+      "family": "multiple_metrics",
+      "split": "development",
+      "question": "统计2010年11月的原始明细条数和取消发票数",
+      "passed": true,
+      "elapsed_seconds": 6.172,
+      "http_status": 200,
+      "request_id": "09435f9c49294df9a507582841e79956",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "LINE_COUNT": 78015,
+            "CANCEL_INVOICE_COUNT": 576
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT COUNT(*) AS LINE_COUNT, COUNT(DISTINCT fact_retail_line.cancel_invoice) AS CANCEL_INVOICE_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2010,
+            "p1": 11
+          },
+          "definitions": {
+            "LINE_COUNT": "原始明细条数，含取消、调整、重复和未知客户记录；不是订单数。",
+            "CANCEL_INVOICE_COUNT": "取消发票数=C开头发票且数量<0且单价>0的不同发票号数量。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "LINE_COUNT",
+              "CANCEL_INVOICE_COUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2010
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 11
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 427.6
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-175",
+      "family": "multiple_metrics",
+      "split": "development",
+      "question": "统计2011年3月的原始明细条数和取消发票数",
+      "passed": true,
+      "elapsed_seconds": 6.819,
+      "http_status": 200,
+      "request_id": "bb1e623097084fde95e1e032a33ef165",
+      "terminal": {
+        "type": "result",
+        "data": [
+          {
+            "LINE_COUNT": 36748,
+            "CANCEL_INVOICE_COUNT": 318
+          }
+        ],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "查询完成，返回 1 行。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT COUNT(*) AS LINE_COUNT, COUNT(DISTINCT fact_retail_line.cancel_invoice) AS CANCEL_INVOICE_COUNT, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_date.month = :p1 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": 2011,
+            "p1": 3
+          },
+          "definitions": {
+            "LINE_COUNT": "原始明细条数，含取消、调整、重复和未知客户记录；不是订单数。",
+            "CANCEL_INVOICE_COUNT": "取消发票数=C开头发票且数量<0且单价>0的不同发票号数量。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "LINE_COUNT",
+              "CANCEL_INVOICE_COUNT"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year",
+                "op": "eq",
+                "value": 2011
+              },
+              {
+                "field": "dim_date.month",
+                "op": "eq",
+                "value": 3
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 209.51
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-194",
+      "family": "unsupported",
+      "split": "development",
+      "question": "2011年的净利润是多少？",
+      "passed": true,
+      "elapsed_seconds": 3.795,
+      "http_status": 200,
+      "request_id": "24b98163321447aaa8c2b7f105a6be7a",
+      "terminal": {
+        "type": "clarification",
+        "message": "当前数据集只提供销售额、订单数、销量、客户数等零售指标，没有净利润或成本字段，无法查询2011年的净利润。您是否想查询2011年的销售额？"
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "clarification"
+      ]
+    },
+    {
+      "id": "retail-193",
+      "family": "no_data",
+      "split": "development",
+      "question": "统计2025年1月的平均订单金额",
+      "passed": true,
+      "elapsed_seconds": 6.75,
+      "http_status": 200,
+      "request_id": "93103f1eadf9478e9ddc2d33a72dd77e",
+      "terminal": {
+        "type": "result",
+        "data": [],
+        "comparison_data": null,
+        "analysis": null,
+        "summary": "没有符合条件的数据，不解释为零。",
+        "evidence": {
+          "mode": "llm_rag",
+          "sql": "SELECT SUM(fact_retail_line.sale_amount) / NULLIF(COUNT(DISTINCT fact_retail_line.sale_invoice), 0) AS AOV, COUNT(*) AS __sample_rows FROM fact_retail_line LEFT JOIN dim_date ON fact_retail_line.date_id = dim_date.date_id WHERE dim_date.year_month = :p0 HAVING COUNT(*) > 0 LIMIT 100",
+          "parameters": {
+            "p0": "2025-01"
+          },
+          "definitions": {
+            "AOV": "平均订单金额GBP=销售额/去重订单数，分母为零返回空值，不是商品单价均值。"
+          },
+          "semantic_version": "uci_retail_ii_v1",
+          "query_plan": {
+            "analysis": null,
+            "metrics": [
+              "AOV"
+            ],
+            "dimensions": [],
+            "filters": [
+              {
+                "field": "dim_date.year_month",
+                "op": "eq",
+                "value": "2025-01"
+              }
+            ],
+            "comparison_filters": null,
+            "order_by": null,
+            "descending": true,
+            "limit": 100
+          },
+          "row_limit": 200,
+          "possibly_truncated": false
+        },
+        "execution_ms": 9.74
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "result"
+      ]
+    },
+    {
+      "id": "retail-196",
+      "family": "unsupported",
+      "split": "development",
+      "question": "2010年的商品采购成本是多少？",
+      "passed": true,
+      "elapsed_seconds": 4.081,
+      "http_status": 200,
+      "request_id": "86d11e70fd9b431b91a567353a0d2b32",
+      "terminal": {
+        "type": "clarification",
+        "message": "当前数据集只提供销售额、订单数、销量、客户数等指标，没有商品采购成本或利润字段，无法查询2010年的商品采购成本。您是否想查询2010年的销售额？"
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "clarification"
+      ]
+    },
+    {
+      "id": "retail-197",
+      "family": "unsupported",
+      "split": "development",
+      "question": "2011年各品牌的销售额分别是多少？",
+      "passed": true,
+      "elapsed_seconds": 3.953,
+      "http_status": 200,
+      "request_id": "dee0d8c8d70f49708a73be7eb99901df",
+      "terminal": {
+        "type": "clarification",
+        "message": "当前数据集没有品牌字段，无法按品牌统计销售额；请改为按商品代码（stock_code）或国家统计，或确认是否接受用商品代码代替品牌。"
+      },
+      "event_types": [
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "progress",
+        "clarification"
+      ]
+    }
+  ],
+  "passed": 50,
+  "completed": 50,
+  "finished_at_utc": "2026-09-29T09:33:32.629561+00:00",
+  "application_unchanged_during_run": true
+}

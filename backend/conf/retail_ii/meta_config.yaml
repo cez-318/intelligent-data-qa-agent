@@ -1,0 +1,49 @@
+tables:
+  - name: fact_retail_line
+    role: fact
+    description: UCI Online Retail II原始发票明细，2009-12-01至2011-12-09，1067371行；同一发票有多行，不能直接按行数算订单。保留重复和缺失客户行，金额GBP。
+    columns:
+      - {name: line_id, role: primary_key, description: 源文件逐行分配的唯一行号, alias: [明细行号], sync: false}
+      - {name: invoice_no, role: dimension, description: 原始发票号含取消发票C前缀, alias: [发票号], sync: false}
+      - {name: stock_code, role: foreign_key, description: 商品代码关联dim_product，字符串标识, alias: [商品代码, SKU], sync: false}
+      - {name: customer_id, role: dimension, description: 原始客户编号可缺失，不是人力员工编号, alias: [客户编号], sync: false}
+      - {name: date_id, role: foreign_key, description: 发票日期YYYYMMDD关联dim_date, alias: [发票日期, 日期], sync: false}
+      - {name: country, role: foreign_key, description: 国家英文名关联dim_country, alias: [国家], sync: false}
+      - {name: quantity, role: measure, description: 原始数量含负数调整，不直接作为销量, alias: [原始数量], sync: false}
+      - {name: unit_price, role: measure, description: 原始单价GBP可能非正值, alias: [商品单价], sync: false}
+      - {name: signed_amount, role: measure, description: 原始带符号数量乘单价，不直接等于净收入, alias: [带符号金额], sync: false}
+      - {name: sale_amount, role: measure, description: 合格销售明细金额GBP用于SALES_AMOUNT及AOV, alias: [销售额, 成交额, 销售金额], sync: false}
+      - {name: sale_units, role: measure, description: 合格销售明细数量用于UNITS, alias: [销量, 销售数量], sync: false}
+      - {name: sale_invoice, role: dimension, description: 合格销售发票号，否则为空，用于去重订单数, alias: [有效订单号, 销售订单], sync: false}
+      - {name: sale_customer, role: dimension, description: 合格销售中非空客户编号，用于活跃客户数, alias: [购买客户, 活跃客户], sync: false}
+      - {name: cancel_amount, role: measure, description: 合格C前缀负数量取消金额的绝对值GBP，不是实际到账退款, alias: [取消金额], sync: false}
+      - {name: cancel_invoice, role: dimension, description: 合格取消发票号，否则为空, alias: [取消发票], sync: false}
+  - name: dim_date
+    role: dim
+    description: 发票日期维度，2009及2011是不完整年份。年用year，月用month或year_month。
+    columns:
+      - {name: date_id, role: primary_key, description: 发票日期YYYYMMDD整数, alias: [日期, 天], sync: false}
+      - {name: year, role: dimension, description: 四位年份2009或2010或2011, alias: [年, 年份], sync: true}
+      - {name: month, role: dimension, description: 月份1至12，跨年按月应同时指定年份, alias: [月, 月份], sync: true}
+      - {name: day, role: dimension, description: 月内日期1至31, alias: [日], sync: false}
+      - {name: year_month, role: dimension, description: 年月字符串YYYY-MM适用于跨年月度趋势, alias: [年月, 月度趋势], sync: true}
+  - name: dim_country
+    role: dim
+    description: 国家地区维度，源文件英文名称；不是省份或销售大区。
+    columns:
+      - {name: country, role: primary_key, description: 国家名称原始英文值，英国United Kingdom，法国France，德国Germany，爱尔兰EIRE，西班牙Spain，荷兰Netherlands，葡萄牙Portugal，比利时Belgium，瑞士Switzerland，澳大利亚Australia, alias: [国家, 国家名称, 国家地区], sync: true}
+  - name: dim_product
+    role: dim
+    description: 商品代码维度，一码一行；名称采用源文件该代码最近非空描述，不是历史分类、品牌或员工信息。
+    columns:
+      - {name: stock_code, role: primary_key, description: 商品代码字符串，按商品统计优先按此代码分组，不自动推断品类, alias: [商品, 商品代码, SKU], sync: false}
+      - {name: product_name, role: dimension, description: 该代码最近的非空商品描述，不保证名称全局唯一，不代表历史时点名称, alias: [商品名称], sync: false}
+metrics:
+  - {name: SALES_AMOUNT, description: 销售额或成交额GBP，合格正数销售明细之和，非净收入和利润, relevant_columns: [fact_retail_line.sale_amount], alias: [销售额, 成交额, 销售金额, 总销售额]}
+  - {name: ORDER_COUNT, description: 合格销售发票去重订单数，不是记录条数, relevant_columns: [fact_retail_line.sale_invoice], alias: [订单数, 去重订单数, 成交订单数]}
+  - {name: AOV, description: 平均订单金额或客单价GBP等于销售额除去重订单数, relevant_columns: [fact_retail_line.sale_amount, fact_retail_line.sale_invoice], alias: [平均订单金额, 客单价]}
+  - {name: UNITS, description: 合格销售数量之和，排除取消调整, relevant_columns: [fact_retail_line.sale_units], alias: [销量, 销售数量, 商品件数]}
+  - {name: ACTIVE_CUSTOMERS, description: 有编号的活跃购买客户去重人数，缺失客户不计, relevant_columns: [fact_retail_line.sale_customer], alias: [活跃客户数, 购买客户数, 购买人数]}
+  - {name: CANCEL_AMOUNT, description: C前缀负数量正单价取消金额GBP，不是实际到账退款, relevant_columns: [fact_retail_line.cancel_amount], alias: [取消金额, 取消订单金额]}
+  - {name: CANCEL_INVOICE_COUNT, description: 合格C前缀取消发票去重数量, relevant_columns: [fact_retail_line.cancel_invoice], alias: [取消发票数, 取消订单数]}
+  - {name: LINE_COUNT, description: 所有原始明细记录行数包含取消重复及缺失客户, relevant_columns: [fact_retail_line.line_id], alias: [明细条数, 明细行数, 原始记录数]}

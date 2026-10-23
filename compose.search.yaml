@@ -1,0 +1,57 @@
+name: intelligent-qa-optimized
+services:
+  elasticsearch:
+    image: docker-elasticsearch
+    pull_policy: never
+    container_name: qa-opt-elasticsearch
+    restart: unless-stopped
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+    ports:
+      - "127.0.0.1:19200:9200"
+    volumes:
+      - qa_es_data:/usr/share/elasticsearch/data
+    mem_limit: 1536m
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS 'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=3s' >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 24
+    security_opt:
+      - no-new-privileges:true
+  qdrant:
+    image: qdrant/qdrant:v1.16
+    pull_policy: never
+    container_name: qa-opt-qdrant
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:16333:6333"
+    volumes:
+      - qa_qdrant_data:/qdrant/storage
+    mem_limit: 1024m
+    security_opt:
+      - no-new-privileges:true
+  embedding:
+    image: ghcr.io/huggingface/text-embeddings-inference:cpu-1.8
+    pull_policy: never
+    container_name: qa-opt-embedding
+    restart: unless-stopped
+    environment:
+      MODEL_ID: /models/bge-large-zh-v1.5
+      MAX_CONCURRENT_REQUESTS: "32"
+      MAX_BATCH_REQUESTS: "4"
+      MAX_BATCH_TOKENS: "2048"
+      MAX_CLIENT_BATCH_SIZE: "4"
+      HF_HUB_OFFLINE: "1"
+    ports:
+      - "127.0.0.1:18080:80"
+    volumes:
+      - ./models/bge-large-zh-v1.5:/models/bge-large-zh-v1.5:ro
+    mem_limit: 4g
+    security_opt:
+      - no-new-privileges:true
+volumes:
+  qa_es_data:
+  qa_qdrant_data:

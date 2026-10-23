@@ -1,0 +1,54 @@
+........................................................................ [ 28%]
+........................................................................ [ 57%]
+........................................................................ [ 86%]
+.................................                                        [100%]
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.14.0-final-0 _______________
+
+Name                                               Stmts   Miss  Cover   Missing
+--------------------------------------------------------------------------------
+app\agent\__init__.py                                  0      0   100%
+app\agent\context.py                                   8      0   100%
+app\agent\graph.py                                    79     21    73%   73-105
+app\agent\llm.py                                      20      2    90%   14, 18
+app\agent\nodes\__init__.py                            0      0   100%
+app\agent\nodes\add_extra_context.py                  25      4    84%   41-44
+app\agent\nodes\correct_sql.py                         6      0   100%
+app\agent\nodes\execute_sql.py                        38      4    89%   14-17
+app\agent\nodes\extract_keywords.py                   15      0   100%
+app\agent\nodes\filter_metric.py                       9      1    89%   10
+app\agent\nodes\filter_table.py                       13      1    92%   10
+app\agent\nodes\generate_sql.py                       56      2    96%   36, 49
+app\agent\nodes\merge_retrieved_info.py               64     20    69%   36-38, 42-53, 73, 79, 101-104
+app\agent\nodes\recall_column.py                      10      0   100%
+app\agent\nodes\recall_metric.py                      10      0   100%
+app\agent\nodes\recall_value.py                        9      0   100%
+app\agent\nodes\validate_sql.py                       32      0   100%
+app\agent\state.py                                    10      0   100%
+app\repositories\mysql\dw\__init__.py                  0      0   100%
+app\repositories\mysql\dw\dw_mysql_repository.py      90     12    87%   83-91, 105, 107-108
+app\services\query_service.py                         35      0   100%
+improved\__init__.py                                   0      0   100%
+improved\analysis_execution.py                        39      0   100%
+improved\analysis_queries.py                          42      0   100%
+improved\auth.py                                      24      0   100%
+improved\compiler.py                                 128     22    83%   67, 72, 82, 85, 90, 101, 109-111, 115-121, 124, 141, 150-153
+improved\context.py                                   66      4    94%   30, 33, 50, 54
+improved\db_logging.py                                12      0   100%
+improved\decomposition.py                             55      1    98%   72
+improved\diagnostics.py                              101      5    95%   72-73, 103-105
+improved\experiment_registry.py                       79      0   100%
+improved\experiments.py                               57      0   100%
+improved\guard.py                                     64      0   100%
+improved\intent_contract.py                           28      0   100%
+improved\model_calls.py                               10      0   100%
+improved\profiles.py                                  20      1    95%   21
+improved\result_analysis.py                           16      0   100%
+improved\retrieval.py                                 28      1    96%   20
+improved\settings.py                                  23      0   100%
+improved\tei.py                                       47      1    98%   24
+main.py                                               42      2    95%   54-55
+--------------------------------------------------------------------------------
+TOTAL                                               1410    104    93%
+Coverage JSON written to file reports/coverage.json
+249 passed in 17.84s

@@ -1,0 +1,22 @@
+{
+  "hillstrom_email_2008": {
+    "title": "Hillstrom 随机邮件实验 · 64,000 名客户",
+    "design": "individual_randomized",
+    "randomization_source": "https://blog.minethatdata.com/2008/03/minethatdata-e-mail-analytics-and-data.html",
+    "data_file": "hillstrom/hillstrom.csv",
+    "sha256": "0e5893329d8b93cefecc571777672028290ab69865718020c78c7284f291aece",
+    "expected_rows": 64000,
+    "assignment_column": "segment",
+    "control": "No E-Mail",
+    "allocation": {"No E-Mail": 0.3333333333333333, "Mens E-Mail": 0.3333333333333333, "Womens E-Mail": 0.3333333333333333},
+    "outcomes": {"conversion": "两周购买率", "visit": "两周访问率"},
+    "baseline_numeric": ["recency", "history", "mens", "womens", "newbie"],
+    "required_columns": ["recency", "history_segment", "history", "mens", "womens", "zip_code", "newbie", "channel", "segment", "visit", "conversion", "spend"],
+    "family_alpha": 0.05,
+    "srm_alpha": 0.001,
+    "minimum_arm_size": 20,
+    "window": "随机分配邮件方案后两周；2008年公开，原文件未给出逐日时间戳",
+    "population": "过去12个月内购买过的客户；分组是邮件内容，不是客户性别",
+    "provenance_note": "发布者公开HTTP下载，HTTPS证书校验失败，未关闭校验。哈希固定下载版本，不代表核实发布者签名。"
+  }
+}

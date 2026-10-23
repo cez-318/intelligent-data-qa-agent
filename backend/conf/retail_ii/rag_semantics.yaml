@@ -1,0 +1,77 @@
+version: uci_retail_ii_v1
+joins_are_many_to_one: true
+required_filters: []
+status: UCI历史零售数据，GBP；源记录全部保留，不擅自去重。不能用于因果推断。
+entity_constraints:
+  - fields: [dim_country.country, fact_retail_line.country]
+    values:
+      United Kingdom: [英国]
+      France: [法国]
+      Germany: [德国]
+      EIRE: [爱尔兰]
+      Spain: [西班牙]
+      Netherlands: [荷兰]
+      Portugal: [葡萄牙]
+      Belgium: [比利时]
+      Switzerland: [瑞士]
+      Australia: [澳大利亚, 澳洲]
+analysis:
+  version: accounting_decomposition_v1
+  additive_metrics: [SALES_AMOUNT, UNITS, CANCEL_AMOUNT, LINE_COUNT]
+  partition_dimensions: [dim_country.country, fact_retail_line.country, dim_product.stock_code, fact_retail_line.stock_code]
+  time_fields: [dim_date.date_id, dim_date.year, dim_date.month, dim_date.day, dim_date.year_month, fact_retail_line.date_id]
+  equivalent_fields: {fact_retail_line.country: dim_country.country, fact_retail_line.stock_code: dim_product.stock_code}
+  volume_value: {revenue: SALES_AMOUNT, orders: ORDER_COUNT}
+relationships:
+  - [fact_retail_line, date_id, dim_date, date_id]
+  - [fact_retail_line, country, dim_country, country]
+  - [fact_retail_line, stock_code, dim_product, stock_code]
+metrics:
+  SALES_AMOUNT:
+    base_table: fact_retail_line
+    expression: SUM(fact_retail_line.sale_amount)
+    required_columns: [fact_retail_line.sale_amount]
+    grain: 原始发票商品明细
+    definition: 销售额GBP=非C开头、数量>0、单价>0且发票号非空的明细金额之和。保留重复记录与缺失客户的销售；非净收入、非利润，不另扣取消金额。
+  ORDER_COUNT:
+    base_table: fact_retail_line
+    expression: COUNT(DISTINCT fact_retail_line.sale_invoice)
+    required_columns: [fact_retail_line.sale_invoice]
+    grain: 有合格销售明细的去重发票
+    definition: 去重订单数=合格销售明细的不同发票号数量，不是明细条数；分组订单数不可直接相加。
+  AOV:
+    base_table: fact_retail_line
+    expression: SUM(fact_retail_line.sale_amount) / NULLIF(COUNT(DISTINCT fact_retail_line.sale_invoice), 0)
+    required_columns: [fact_retail_line.sale_amount, fact_retail_line.sale_invoice]
+    grain: 有合格销售明细的去重发票
+    definition: 平均订单金额GBP=销售额/去重订单数，分母为零返回空值，不是商品单价均值。
+  UNITS:
+    base_table: fact_retail_line
+    expression: SUM(fact_retail_line.sale_units)
+    required_columns: [fact_retail_line.sale_units]
+    grain: 原始发票商品明细
+    definition: 销量=合格销售明细的数量之和，不包含取消单及非正数量或非正价格记录。
+  ACTIVE_CUSTOMERS:
+    base_table: fact_retail_line
+    expression: COUNT(DISTINCT fact_retail_line.sale_customer)
+    required_columns: [fact_retail_line.sale_customer]
+    grain: 有编号的去重购买客户
+    definition: 活跃购买客户数=合格销售明细中非空客户编号去重计数。未知客户不估算，不能代表全部购买人数。
+  CANCEL_AMOUNT:
+    base_table: fact_retail_line
+    expression: SUM(fact_retail_line.cancel_amount)
+    required_columns: [fact_retail_line.cancel_amount]
+    grain: 取消发票商品明细
+    definition: 取消金额GBP=C开头发票且数量<0且单价>0的明细绝对金额之和；不是经过支付流水验证的实际退款。
+  CANCEL_INVOICE_COUNT:
+    base_table: fact_retail_line
+    expression: COUNT(DISTINCT fact_retail_line.cancel_invoice)
+    required_columns: [fact_retail_line.cancel_invoice]
+    grain: 有合格取消明细的去重发票
+    definition: 取消发票数=C开头发票且数量<0且单价>0的不同发票号数量。
+  LINE_COUNT:
+    base_table: fact_retail_line
+    expression: COUNT(*)
+    required_columns: [fact_retail_line.line_id]
+    grain: 原始发票商品明细
+    definition: 原始明细条数，含取消、调整、重复和未知客户记录；不是订单数。

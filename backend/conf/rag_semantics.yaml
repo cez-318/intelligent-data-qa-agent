@@ -1,0 +1,22 @@
+version: ecommerce_sample_v1
+joins_are_many_to_one: true
+required_filters: []
+status: 示例口径，接入业务前必须确认事实表粒度及退款等规则
+relationships:
+  - [fact_order, region_id, dim_region, region_id]
+  - [fact_order, customer_id, dim_customer, customer_id]
+  - [fact_order, product_id, dim_product, product_id]
+  - [fact_order, date_id, dim_date, date_id]
+metrics:
+  GMV:
+    base_table: fact_order
+    expression: SUM(fact_order.order_amount)
+    required_columns: [fact_order.order_amount]
+    grain: 订单记录
+    definition: 示例假设order_amount为可累加金额；不自动推断退款和取消口径
+  AOV:
+    base_table: fact_order
+    expression: SUM(fact_order.order_amount) / NULLIF(COUNT(DISTINCT fact_order.order_id), 0)
+    required_columns: [fact_order.order_amount, fact_order.order_id]
+    grain: 订单
+    definition: 示例平均订单金额=订单金额合计/去重订单数，不是平均商品单价；分母为零返回空值

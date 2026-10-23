@@ -1,0 +1,24 @@
+logging:
+  file: {enable: false, level: INFO, path: logs, rotation: 10 MB, retention: 7 days}
+  console: {enable: true, level: INFO}
+db_meta:
+  host: ${oc.env:META_DB_HOST,127.0.0.1}
+  port: ${oc.env:META_DB_PORT,3306}
+  user: ${oc.env:META_DB_USER,metadata_owner}
+  password: ${oc.env:META_DB_PASSWORD,""}
+  database: ${oc.env:META_DB_NAME,meta}
+db_dw:
+  host: ${oc.env:DW_DB_HOST,127.0.0.1}
+  port: ${oc.env:DW_DB_PORT,3306}
+  user: ${oc.env:DW_DB_USER,qa_readonly}
+  password: ${oc.env:DW_DB_PASSWORD,""}
+  database: ${oc.env:DW_DB_NAME,dw}
+qdrant: {host: "${oc.env:QDRANT_HOST,127.0.0.1}", port: "${oc.env:QDRANT_PORT,6333}", embedding_size: "${oc.env:EMBEDDING_SIZE,1024}"}
+embedding: {host: "${oc.env:EMBEDDING_HOST,127.0.0.1}", port: "${oc.env:EMBEDDING_PORT,8080}", model: "${oc.env:EMBEDDING_MODEL,bge-large-zh-v1.5}"}
+es: {host: "${oc.env:ES_HOST,127.0.0.1}", port: "${oc.env:ES_PORT,9200}", index_name: "${oc.env:ES_INDEX,column_values}"}
+llm:
+  provider: ${oc.env:LLM_PROVIDER,deepseek}
+  thinking: ${oc.env:LLM_THINKING,disabled}
+  model_name: ${oc.env:LLM_MODEL,deepseek-flash}
+  api_key: ${oc.env:LLM_API_KEY,""}
+  base_url: ${oc.env:LLM_BASE_URL,https://api.deepseek.com}

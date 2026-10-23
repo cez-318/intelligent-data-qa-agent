@@ -1,0 +1,244 @@
+[
+  {
+    "question": "2026年成交总额",
+    "expected": [
+      {
+        "GMV": 600
+      }
+    ],
+    "passed": true,
+    "controlled_model": true,
+    "model_stages": [
+      "expand_columns",
+      "expand_metrics",
+      "expand_values",
+      "select_metrics",
+      "select_columns",
+      "plan_query"
+    ],
+    "result": {
+      "type": "result",
+      "data": [
+        {
+          "GMV": 600.0
+        }
+      ],
+      "comparison_data": null,
+      "analysis": null,
+      "summary": "查询完成，返回 1 行。",
+      "evidence": {
+        "mode": "llm_rag",
+        "sql": "SELECT SUM(fact_order.order_amount) AS GMV, COUNT(*) AS __sample_rows FROM fact_order LEFT JOIN dim_date ON fact_order.date_id = dim_date.date_id WHERE dim_date.year = :p0 HAVING COUNT(*) > 0 LIMIT 100",
+        "parameters": {
+          "p0": 2026
+        },
+        "definitions": {
+          "GMV": "示例假设order_amount为可累加金额；不自动推断退款和取消口径"
+        },
+        "semantic_version": "ecommerce_sample_v1",
+        "query_plan": {
+          "analysis": null,
+          "metrics": [
+            "GMV"
+          ],
+          "dimensions": [],
+          "filters": [
+            {
+              "field": "dim_date.year",
+              "op": "eq",
+              "value": 2026
+            }
+          ],
+          "comparison_filters": null,
+          "order_by": null,
+          "descending": true,
+          "limit": 100
+        },
+        "row_limit": 200,
+        "possibly_truncated": false
+      },
+      "execution_ms": 3.24
+    }
+  },
+  {
+    "question": "2026年平均订单金额",
+    "expected": [
+      {
+        "AOV": 200
+      }
+    ],
+    "passed": true,
+    "controlled_model": true,
+    "model_stages": [
+      "expand_columns",
+      "expand_metrics",
+      "expand_values",
+      "select_metrics",
+      "select_columns",
+      "plan_query"
+    ],
+    "result": {
+      "type": "result",
+      "data": [
+        {
+          "AOV": 200.0
+        }
+      ],
+      "comparison_data": null,
+      "analysis": null,
+      "summary": "查询完成，返回 1 行。",
+      "evidence": {
+        "mode": "llm_rag",
+        "sql": "SELECT SUM(fact_order.order_amount) / NULLIF(COUNT(DISTINCT fact_order.order_id), 0) AS AOV, COUNT(*) AS __sample_rows FROM fact_order LEFT JOIN dim_date ON fact_order.date_id = dim_date.date_id WHERE dim_date.year = :p0 HAVING COUNT(*) > 0 LIMIT 100",
+        "parameters": {
+          "p0": 2026
+        },
+        "definitions": {
+          "AOV": "示例平均订单金额=订单金额合计/去重订单数，不是平均商品单价；分母为零返回空值"
+        },
+        "semantic_version": "ecommerce_sample_v1",
+        "query_plan": {
+          "analysis": null,
+          "metrics": [
+            "AOV"
+          ],
+          "dimensions": [],
+          "filters": [
+            {
+              "field": "dim_date.year",
+              "op": "eq",
+              "value": 2026
+            }
+          ],
+          "comparison_filters": null,
+          "order_by": null,
+          "descending": true,
+          "limit": 100
+        },
+        "row_limit": 200,
+        "possibly_truncated": false
+      },
+      "execution_ms": 3.23
+    }
+  },
+  {
+    "question": "2026年广东成交总额",
+    "expected": [
+      {
+        "GMV": 400
+      }
+    ],
+    "passed": true,
+    "controlled_model": true,
+    "model_stages": [
+      "expand_columns",
+      "expand_metrics",
+      "expand_values",
+      "select_metrics",
+      "select_columns",
+      "plan_query"
+    ],
+    "result": {
+      "type": "result",
+      "data": [
+        {
+          "GMV": 400.0
+        }
+      ],
+      "comparison_data": null,
+      "analysis": null,
+      "summary": "查询完成，返回 1 行。",
+      "evidence": {
+        "mode": "llm_rag",
+        "sql": "SELECT SUM(fact_order.order_amount) AS GMV, COUNT(*) AS __sample_rows FROM fact_order LEFT JOIN dim_region ON fact_order.region_id = dim_region.region_id LEFT JOIN dim_date ON fact_order.date_id = dim_date.date_id WHERE dim_date.year = :p0 AND dim_region.province = :p1 HAVING COUNT(*) > 0 LIMIT 100",
+        "parameters": {
+          "p0": 2026,
+          "p1": "广东"
+        },
+        "definitions": {
+          "GMV": "示例假设order_amount为可累加金额；不自动推断退款和取消口径"
+        },
+        "semantic_version": "ecommerce_sample_v1",
+        "query_plan": {
+          "analysis": null,
+          "metrics": [
+            "GMV"
+          ],
+          "dimensions": [],
+          "filters": [
+            {
+              "field": "dim_date.year",
+              "op": "eq",
+              "value": 2026
+            },
+            {
+              "field": "dim_region.province",
+              "op": "eq",
+              "value": "广东"
+            }
+          ],
+          "comparison_filters": null,
+          "order_by": null,
+          "descending": true,
+          "limit": 100
+        },
+        "row_limit": 200,
+        "possibly_truncated": false
+      },
+      "execution_ms": 3.34
+    }
+  },
+  {
+    "question": "1900年成交总额",
+    "expected": [],
+    "passed": true,
+    "controlled_model": true,
+    "model_stages": [
+      "expand_columns",
+      "expand_metrics",
+      "expand_values",
+      "select_metrics",
+      "select_columns",
+      "plan_query"
+    ],
+    "result": {
+      "type": "result",
+      "data": [],
+      "comparison_data": null,
+      "analysis": null,
+      "summary": "没有符合条件的数据，不解释为零。",
+      "evidence": {
+        "mode": "llm_rag",
+        "sql": "SELECT SUM(fact_order.order_amount) AS GMV, COUNT(*) AS __sample_rows FROM fact_order LEFT JOIN dim_date ON fact_order.date_id = dim_date.date_id WHERE dim_date.year = :p0 HAVING COUNT(*) > 0 LIMIT 100",
+        "parameters": {
+          "p0": 1900
+        },
+        "definitions": {
+          "GMV": "示例假设order_amount为可累加金额；不自动推断退款和取消口径"
+        },
+        "semantic_version": "ecommerce_sample_v1",
+        "query_plan": {
+          "analysis": null,
+          "metrics": [
+            "GMV"
+          ],
+          "dimensions": [],
+          "filters": [
+            {
+              "field": "dim_date.year",
+              "op": "eq",
+              "value": 1900
+            }
+          ],
+          "comparison_filters": null,
+          "order_by": null,
+          "descending": true,
+          "limit": 100
+        },
+        "row_limit": 200,
+        "possibly_truncated": false
+      },
+      "execution_ms": 2.57
+    }
+  }
+]
