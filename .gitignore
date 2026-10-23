@@ -14,3 +14,4 @@ datasets/**/*.zip
 datasets/**/*.xlsx
 datasets/**/*.csv
 datasets/**/*.duckdb*
+docs/面经-智能问数.md
